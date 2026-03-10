@@ -49,7 +49,7 @@
     "include": ["src/"],
     "rules": {
       "tags": ["fresh", "jsr", "jsx", "react", "recommended", "workspace"],
-      "exclude": ["no-console", "no-external-import", "prefer-ascii", "prefer-primordials"]
+      "exclude": ["no-console", "no-external-import", "prefer-ascii", "prefer-primordials", "verbatim-module-syntax"]
     }
   },
   "lock": true,
@@ -76,6 +76,8 @@
     "react-dom": "npm:react-dom@^19.2.4",
     "react-dom/client": "npm:react-dom@^19.2.4/client",
     "react-router-dom": "npm:react-router-dom@^7.13.1",
+    "lucide-react": "npm:lucide-react@^0.577.0",
+    "recharts": "npm:recharts@^3.8.0",
     "vite": "npm:vite@^7.3.1"
   },
   "publish": {

@@ -1,3 +1,32 @@
+.dashboard-layout-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-app);
+}
+
+.dashboard-layout-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.dashboard-layout-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: var(--bg-app-subtle);
+}
+
+.dashboard-layout-inner {
+  margin: 0 auto;
+}
+
+.dashboard-page-subtitle-icon {
+  color: var(--primary);
+}
+
 .app-main {
   max-width: 56rem;
   margin: 0 auto;
