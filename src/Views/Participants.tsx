@@ -1,79 +1,117 @@
-import React, { useMemo, useState } from 'react'
-import type { JSX } from 'react'
-import { mockBrokers, mockParticipants, mockPrimaryDealers } from '@app/Mock/index.ts'
+import React, { type JSX, useMemo, useState } from 'react'
+import { Building2, Store, Users } from 'lucide-react'
+import * as Components from '@app/Components/index.ts'
+import * as Hooks from '@app/Hooks/index.ts'
+import * as Utils from '@app/Utils/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-type ParticipantTab = 'brokers' | 'participants' | 'dealers'
+const tabConfig: Record<Types.ParticipantTab, { label: string; Icon: typeof Building2 }> = {
+  brokers: { label: 'Brokers', Icon: Building2 },
+  participants: { label: 'Participants', Icon: Users },
+  dealers: { label: 'Primary Dealers', Icon: Store }
+}
 
-function filterByQuery<T extends { code: string; name: string }>(list: T[], q: string): T[] {
+function filterByQuery<T extends { code?: string; name?: string }>(list: T[], q: string): T[] {
   const s = q.trim().toLowerCase()
   if (!s) {
     return list
   }
   return list.filter(
-    (row) => row.code.toLowerCase().includes(s) || row.name.toLowerCase().includes(s)
+    (row) =>
+      String(row.code ?? '')
+        .toLowerCase()
+        .includes(s) ||
+      String(row.name ?? '')
+        .toLowerCase()
+        .includes(s)
   )
 }
 
-const searchInputStyle = {
-  marginBottom: '0.75rem',
-  padding: '0.5rem 0.75rem',
-  borderRadius: 'var(--radius-lg)',
-  border: '1px solid var(--border-light)',
-  minWidth: '220px'
-} as const
+const defaultPageSize = 20
 
 export function Participants(): JSX.Element {
-  const [tab, setTab] = useState<ParticipantTab>('brokers')
+  const [tab, setTab] = useState<Types.ParticipantTab>('brokers')
   const [search, setSearch] = useState('')
+  const [page, setPage] = useState(1)
+  const [pageSize] = useState(defaultPageSize)
+  const brokersParams = useMemo(
+    () => ({
+      limit: pageSize,
+      offset: Utils.pageToOffset(page, pageSize),
+      includeTotal: true as const
+    }),
+    [page, pageSize]
+  )
+  const brokers = Hooks.useBrokers(brokersParams)
+  const dealersParams = useMemo(
+    () => ({
+      limit: pageSize,
+      offset: Utils.pageToOffset(page, pageSize),
+      includeTotal: true as const
+    }),
+    [page, pageSize]
+  )
+  const dealers = Hooks.useDealers(dealersParams)
+  const profilesParams = useMemo(
+    () => ({
+      limit: pageSize,
+      offset: Utils.pageToOffset(page, pageSize),
+      includeTotal: true as const
+    }),
+    [page, pageSize]
+  )
+  const profiles = Hooks.useParticipantProfiles(profilesParams)
+  const brokersList = (brokers.data ?? []) as {
+    code?: string
+    name?: string
+    license?: string
+    address?: string
+  }[]
+  const dealersList = (dealers.data ?? []) as {
+    code?: string
+    name?: string
+    [k: string]: unknown
+  }[]
+  const profilesList = (profiles.data ?? []) as {
+    code?: string
+    name?: string
+    [k: string]: unknown
+  }[]
   const filteredBrokers = useMemo(
-    () => filterByQuery(mockBrokers, tab === 'brokers' ? search : ''),
-    [tab, search]
+    () => filterByQuery(brokersList, tab === 'brokers' ? search : ''),
+    [tab, search, brokersList]
   )
   const filteredParticipants = useMemo(
-    () => filterByQuery(mockParticipants, tab === 'participants' ? search : ''),
-    [tab, search]
+    () => filterByQuery(profilesList, tab === 'participants' ? search : ''),
+    [tab, search, profilesList]
   )
   const filteredDealers = useMemo(
-    () => filterByQuery(mockPrimaryDealers, tab === 'dealers' ? search : ''),
-    [tab, search]
+    () => filterByQuery(dealersList, tab === 'dealers' ? search : ''),
+    [tab, search, dealersList]
   )
 
   return (
     <div className='dashboard-overview'>
-      <p className='dashboard-page-subtitle'>
-        Brokers, participants, primary dealers — one tab per dataset (mock)
-      </p>
       <div className='dashboard-card page-section'>
-        <div
-          style={{
-            display: 'flex',
-            gap: '0.5rem',
-            marginBottom: '1rem',
-            flexWrap: 'wrap',
-            alignItems: 'center'
-          }}
-        >
-          {(['brokers', 'participants', 'dealers'] as ParticipantTab[]).map((t) => (
-            <button
-              key={t}
-              type='button'
-              className='dashboard-sync-btn'
-              style={{
-                background: tab === t ? 'var(--primary)' : 'var(--bg-subtle)',
-                color: tab === t ? 'white' : 'var(--text-main)'
-              }}
-              onClick={() => {
-                setTab(t)
-                setSearch('')
-              }}
-            >
-              {t === 'brokers'
-                ? 'Brokers'
-                : t === 'participants'
-                ? 'Participants'
-                : 'Primary Dealers'}
-            </button>
-          ))}
+        <div className='dashboard-tabs-row'>
+          {(['brokers', 'participants', 'dealers'] as Types.ParticipantTab[]).map((t) => {
+            const { label, Icon } = tabConfig[t]
+            return (
+              <button
+                key={t}
+                type='button'
+                className={tab === t ? 'dashboard-sync-btn is-primary' : 'dashboard-sync-btn'}
+                onClick={() => {
+                  setTab(t)
+                  setSearch('')
+                  setPage(1)
+                }}
+              >
+                <Icon size={18} aria-hidden />
+                {label}
+              </button>
+            )
+          })}
         </div>
         {tab === 'brokers' && (
           <>
@@ -82,7 +120,7 @@ export function Participants(): JSX.Element {
               placeholder='Search by code or name...'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={searchInputStyle}
+              className='dashboard-search-input'
             />
             <h2 className='data-section-title'>Brokers</h2>
             <div className='data-table-wrap'>
@@ -96,17 +134,39 @@ export function Participants(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredBrokers.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td>{row.name}</td>
-                      <td>{row.license ?? '—'}</td>
-                      <td>{row.address ?? '—'}</td>
-                    </tr>
-                  ))}
+                  {brokers.loading
+                    ? (
+                      <tr>
+                        <td colSpan={4}>Loading…</td>
+                      </tr>
+                    )
+                    : filteredBrokers.length
+                    ? (
+                      filteredBrokers.map((row) => (
+                        <tr key={String(row.code)}>
+                          <td>{row.code ?? '—'}</td>
+                          <td>{row.name ?? '—'}</td>
+                          <td>{(row as { license?: string }).license ?? '—'}</td>
+                          <td>{(row as { address?: string }).address ?? '—'}</td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={4}>No brokers</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={brokers.meta?.total}
+              onPageChange={setPage}
+              loading={brokers.loading}
+              itemCount={filteredBrokers.length}
+            />
           </>
         )}
         {tab === 'participants' && (
@@ -116,7 +176,7 @@ export function Participants(): JSX.Element {
               placeholder='Search by code or name...'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={searchInputStyle}
+              className='dashboard-search-input'
             />
             <h2 className='data-section-title'>Participants</h2>
             <div className='data-table-wrap'>
@@ -130,17 +190,39 @@ export function Participants(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredParticipants.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td>{row.name}</td>
-                      <td>{row.license ?? '—'}</td>
-                      <td>{row.type ?? '—'}</td>
-                    </tr>
-                  ))}
+                  {profiles.loading
+                    ? (
+                      <tr>
+                        <td colSpan={4}>Loading…</td>
+                      </tr>
+                    )
+                    : filteredParticipants.length
+                    ? (
+                      filteredParticipants.map((row) => (
+                        <tr key={String(row.code)}>
+                          <td>{row.code ?? '—'}</td>
+                          <td>{row.name ?? '—'}</td>
+                          <td>{String((row as { license?: string }).license ?? '—')}</td>
+                          <td>{String((row as { type?: string }).type ?? '—')}</td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={4}>No participants</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={profiles.meta?.total}
+              onPageChange={setPage}
+              loading={profiles.loading}
+              itemCount={filteredParticipants.length}
+            />
           </>
         )}
         {tab === 'dealers' && (
@@ -150,7 +232,7 @@ export function Participants(): JSX.Element {
               placeholder='Search by code or name...'
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={searchInputStyle}
+              className='dashboard-search-input'
             />
             <h2 className='data-section-title'>Primary Dealers</h2>
             <div className='data-table-wrap'>
@@ -163,16 +245,38 @@ export function Participants(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredDealers.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td>{row.name}</td>
-                      <td>{row.license ?? '—'}</td>
-                    </tr>
-                  ))}
+                  {dealers.loading
+                    ? (
+                      <tr>
+                        <td colSpan={3}>Loading…</td>
+                      </tr>
+                    )
+                    : filteredDealers.length
+                    ? (
+                      filteredDealers.map((row) => (
+                        <tr key={String(row.code)}>
+                          <td>{row.code ?? '—'}</td>
+                          <td>{row.name ?? '—'}</td>
+                          <td>{String((row as { license?: string }).license ?? '—')}</td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={3}>No dealers</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={dealers.meta?.total}
+              onPageChange={setPage}
+              loading={dealers.loading}
+              itemCount={filteredDealers.length}
+            />
           </>
         )}
       </div>

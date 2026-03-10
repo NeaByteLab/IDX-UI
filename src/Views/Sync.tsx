@@ -1,11 +1,10 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { RefreshCw } from 'lucide-react'
-import { PlaceholderPanel } from '@app/Components/Placeholder/Panel.tsx'
+import * as Components from '@app/Components/index.ts'
 
 export function Sync(): JSX.Element {
   return (
-    <PlaceholderPanel
+    <Components.PlaceholderPanel
       icon={RefreshCw}
       title='Sync Manager Interface'
       description='Halaman untuk konfigurasi otomasi pipeline dan trigger manual sync IDX API.'

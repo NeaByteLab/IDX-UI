@@ -1,9 +1,9 @@
 import React, { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { BadRequest, ServerError } from '@app/Errors/index.ts'
-import { DashboardLayout } from '@app/Layout/index.ts'
-import { Dashboard } from '@app/Views/Dashboard.tsx'
+import * as Errors from '@app/Errors/index.ts'
+import * as Layout from '@app/Layout/index.ts'
+import * as Views from '@app/Views/Dashboard.tsx'
 import '@app/Assets/style.css'
 
 const Sync = lazy(() => import('@app/Views/Sync.tsx').then((m) => ({ default: m.Sync })))
@@ -30,11 +30,11 @@ function App(): React.ReactNode {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/400' element={<BadRequest />} />
-        <Route path='/500' element={<ServerError />} />
+        <Route path='/400' element={<Errors.BadRequest />} />
+        <Route path='/500' element={<Errors.ServerError />} />
         <Route path='/page' element={<Navigate to='/' replace />} />
-        <Route element={<DashboardLayout />}>
-          <Route path='/' element={<Dashboard />} />
+        <Route element={<Layout.DashboardLayout />}>
+          <Route path='/' element={<Views.Dashboard />} />
           <Route path='/market' element={<Market />} />
           <Route path='/companies' element={<Companies />} />
           <Route path='/companies/:code' element={<CompanyDetail />} />

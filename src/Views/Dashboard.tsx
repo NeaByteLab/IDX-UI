@@ -1,23 +1,8 @@
-import React from 'react'
-import type { JSX } from 'react'
-import {
-  CompanyNewsCard,
-  DataIngestionChart,
-  IdxAnnouncementCard,
-  MiniWidget,
-  PipelineHealthCard,
-  QuickInsightsCard,
-  StorageHealthCard
-} from '@app/Components/index.ts'
-import type {
-  CompanyNewsItem,
-  IdxAnnouncementItem,
-  PipelineHealthRow,
-  QuickInsightItem,
-  SyncHistoryPoint
-} from '@app/Types/index.ts'
+import React, { type JSX } from 'react'
+import * as Components from '@app/Components/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-const syncHistoryData: SyncHistoryPoint[] = [
+const syncHistoryData: Types.SyncHistoryPoint[] = [
   { name: '08:00', value: 400 },
   { name: '10:00', value: 3000 },
   { name: '12:00', value: 2000 },
@@ -27,7 +12,7 @@ const syncHistoryData: SyncHistoryPoint[] = [
   { name: '20:00', value: 3490 }
 ]
 
-const companyNews: CompanyNewsItem[] = [
+const companyNews: Types.CompanyNewsItem[] = [
   {
     id: 1,
     code: 'BBCA',
@@ -51,7 +36,7 @@ const companyNews: CompanyNewsItem[] = [
   }
 ]
 
-const idxAnnouncements: IdxAnnouncementItem[] = [
+const idxAnnouncements: Types.IdxAnnouncementItem[] = [
   {
     id: 1,
     title: 'GOTO Trading Suspension Lifted',
@@ -66,13 +51,13 @@ const idxAnnouncements: IdxAnnouncementItem[] = [
   }
 ]
 
-const pipelineItems: PipelineHealthRow[] = [
+const pipelineItems: Types.PipelineHealthRow[] = [
   { label: 'API Uptime', val: '99.98%', status: 'success' },
   { label: 'Auto Retries', val: '12', status: 'warning' },
   { label: 'Failed Jobs', val: '0', status: 'success' }
 ]
 
-const quickInsights: QuickInsightItem[] = [
+const quickInsights: Types.QuickInsightItem[] = [
   { label: 'Top Gainer', symbol: 'GOTO', icon: 'ArrowUpRight' },
   { label: 'Hot Stock', symbol: 'BBRI', icon: 'Zap' }
 ]
@@ -81,10 +66,10 @@ export function Dashboard(): JSX.Element {
   return (
     <div className='dashboard-overview'>
       <div className='mini-widgets-grid'>
-        <MiniWidget title='IHSG Composite' value='7,320.12' change='+0.45%' isUp />
-        <MiniWidget title='LQ45 Index' value='982.45' change='-0.12%' isUp={false} />
-        <MiniWidget title='Total Volume' value='18.2B' change='+1.2B' isUp />
-        <MiniWidget title='Market Cap' value='Rp11.2T' change='+2.4%' isUp />
+        <Components.MiniWidget title='IHSG Composite' value='7,320.12' change='+0.45%' isUp />
+        <Components.MiniWidget title='LQ45 Index' value='982.45' change='-0.12%' isUp={false} />
+        <Components.MiniWidget title='Total Volume' value='18.2B' change='+1.2B' isUp />
+        <Components.MiniWidget title='Market Cap' value='Rp11.2T' change='+2.4%' isUp />
       </div>
       <div className='dashboard-main-grid'>
         <div className='dashboard-main-col'>
@@ -99,17 +84,17 @@ export function Dashboard(): JSX.Element {
                 LIVE
               </div>
             </div>
-            <DataIngestionChart data={syncHistoryData} />
+            <Components.DataIngestionChart data={syncHistoryData} />
           </div>
           <div className='news-grid'>
-            <CompanyNewsCard items={companyNews} />
-            <IdxAnnouncementCard items={idxAnnouncements} />
+            <Components.CompanyNewsCard items={companyNews} />
+            <Components.IdxAnnouncementCard items={idxAnnouncements} />
           </div>
         </div>
         <div className='dashboard-sidebar-col'>
-          <StorageHealthCard value='1.28 GB' percent={82} />
-          <PipelineHealthCard items={pipelineItems} />
-          <QuickInsightsCard items={quickInsights} />
+          <Components.StorageHealthCard value='1.28 GB' percent={82} />
+          <Components.PipelineHealthCard items={pipelineItems} />
+          <Components.QuickInsightsCard items={quickInsights} />
         </div>
       </div>
     </div>

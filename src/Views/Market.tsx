@@ -1,5 +1,13 @@
-import React, { useMemo, useState } from 'react'
-import type { JSX } from 'react'
+import React, { type JSX, useMemo, useState } from 'react'
+import {
+  BarChart2,
+  Globe,
+  LineChart as ChartIcon,
+  List,
+  PieChart,
+  TrendingDown,
+  TrendingUp
+} from 'lucide-react'
 import {
   CartesianGrid,
   Line,
@@ -9,41 +17,12 @@ import {
   XAxis,
   YAxis
 } from 'recharts'
-import {
-  mockForeignFlow,
-  mockIndexChart,
-  mockIndexList,
-  mockIndexSummary,
-  mockSectoralMovement,
-  mockTopGainers,
-  mockTopLosers
-} from '@app/Mock/index.ts'
+import * as Components from '@app/Components/index.ts'
+import * as Hooks from '@app/Hooks/index.ts'
+import * as Utils from '@app/Utils/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-type MarketTab =
-  | 'chart'
-  | 'indexList'
-  | 'indexSummary'
-  | 'sectoral'
-  | 'gainers'
-  | 'losers'
-  | 'foreignFlow'
-
-const filterInputStyle = {
-  marginLeft: '0.5rem',
-  padding: '0.5rem 0.75rem',
-  borderRadius: 'var(--radius-lg)',
-  border: '1px solid var(--border-light)'
-} as const
-
-const searchInputStyle = {
-  marginBottom: '0.75rem',
-  padding: '0.5rem 0.75rem',
-  borderRadius: 'var(--radius-lg)',
-  border: '1px solid var(--border-light)',
-  minWidth: '200px'
-} as const
-
-const tabLabels: Record<MarketTab, string> = {
+const tabLabels: Record<Types.MarketTab, string> = {
   chart: 'Index Chart',
   indexList: 'Index List',
   indexSummary: 'Index Summary',
@@ -53,106 +32,232 @@ const tabLabels: Record<MarketTab, string> = {
   foreignFlow: 'Foreign Flow'
 }
 
+const marketTabIcons: Record<Types.MarketTab, typeof ChartIcon> = {
+  chart: ChartIcon,
+  indexList: List,
+  indexSummary: BarChart2,
+  sectoral: PieChart,
+  gainers: TrendingUp,
+  losers: TrendingDown,
+  foreignFlow: Globe
+}
+
+function parseYearMonth(ym: string): { year: number; month: number } | null {
+  if (!ym || ym.length < 7) {
+    return null
+  }
+  const y = parseInt(ym.slice(0, 4), 10)
+  const m = parseInt(ym.slice(5, 7), 10)
+  if (Number.isNaN(y) || Number.isNaN(m) || m < 1 || m > 12) {
+    return null
+  }
+  return { year: y, month: m }
+}
+
+const defaultPageSize = 20
+
 export function Market(): JSX.Element {
-  const [tab, setTab] = useState<MarketTab>('chart')
+  const [tab, setTab] = useState<Types.MarketTab>('chart')
+  const [page, setPage] = useState(1)
+  const [pageSize] = useState(defaultPageSize)
   const [selectedIndex, setSelectedIndex] = useState('IHSG')
   const [selectedDate, setSelectedDate] = useState('2025-03-10')
   const [periodYearMonth, setPeriodYearMonth] = useState('2025-03')
   const [indexSearch, setIndexSearch] = useState('')
-  const chartData = useMemo(() => {
-    const upTo = selectedDate
-    return mockIndexChart
-      .filter((p) => p.date <= upTo)
-      .map((p) => ({ ...p, name: p.date }))
-  }, [selectedDate])
-  const sectoralTable = useMemo(
-    () =>
-      mockSectoralMovement.map((s) => ({
-        name: s.name,
-        lastChange: s.points[s.points.length - 1]?.change ?? 0
-      })),
-    []
+  const period = useMemo(() => parseYearMonth(periodYearMonth), [periodYearMonth])
+  const indicesParams = useMemo(
+    () => ({
+      limit: pageSize,
+      offset: Utils.pageToOffset(page, pageSize),
+      includeTotal: true as const
+    }),
+    [page, pageSize]
   )
+  const indices = Hooks.useMarketIndices(indicesParams)
+  const indexChart = Hooks.useMarketIndexChart(selectedIndex, { period: '1M', limit: 100 })
+  const indexSummaryParams = useMemo(
+    () => ({
+      date: selectedDate,
+      limit: pageSize,
+      offset: Utils.pageToOffset(page, pageSize),
+      includeTotal: true as const
+    }),
+    [selectedDate, page, pageSize]
+  )
+  const indexSummary = Hooks.useMarketIndexSummary(indexSummaryParams)
+  const sectoralParams = useMemo(
+    () =>
+      period
+        ? {
+          year: period.year,
+          month: period.month,
+          limit: pageSize,
+          offset: Utils.pageToOffset(page, pageSize),
+          includeTotal: true as const
+        }
+        : null,
+    [period, page, pageSize]
+  )
+  const sectoral = Hooks.useMarketSectoralMovement(sectoralParams)
+  const topGainersParams = useMemo(
+    () =>
+      period
+        ? {
+          year: period.year,
+          month: period.month,
+          limit: pageSize,
+          offset: Utils.pageToOffset(page, pageSize),
+          includeTotal: true as const
+        }
+        : null,
+    [period, page, pageSize]
+  )
+  const topGainers = Hooks.useTradingTopGainer(topGainersParams)
+  const topLosersParams = useMemo(
+    () =>
+      period
+        ? {
+          year: period.year,
+          month: period.month,
+          limit: pageSize,
+          offset: Utils.pageToOffset(page, pageSize),
+          includeTotal: true as const
+        }
+        : null,
+    [period, page, pageSize]
+  )
+  const topLosers = Hooks.useTradingTopLoser(topLosersParams)
+  const foreignFlowParams = useMemo(
+    () =>
+      period
+        ? {
+          year: period.year,
+          month: period.month,
+          limit: pageSize,
+          offset: Utils.pageToOffset(page, pageSize),
+          includeTotal: true as const
+        }
+        : null,
+    [period, page, pageSize]
+  )
+  const foreignFlow = Hooks.useTradingForeign(foreignFlowParams)
+  const indexListRaw = (indices.data ?? []) as {
+    code?: string
+    name?: string
+    close?: number
+    change?: number
+    [k: string]: unknown
+  }[]
+  const chartData = useMemo(() => {
+    const list = (indexChart.data ?? []) as { date?: string; value?: number; close?: number }[]
+    return list.map((p) => ({
+      ...p,
+      name: p.date ?? '',
+      value: Number(p.value ?? p.close ?? 0)
+    }))
+  }, [indexChart.data])
+  const sectoralTable = useMemo(() => {
+    const list = (sectoral.data ?? []) as { name?: string; change?: number; [k: string]: unknown }[]
+    return list.map((s) => ({
+      name: String(s?.name ?? '—'),
+      lastChange: Number(s?.change ?? 0)
+    }))
+  }, [sectoral.data])
   const filteredIndexList = useMemo(() => {
     const q = indexSearch.trim().toLowerCase()
     if (!q) {
-      return mockIndexList
+      return indexListRaw
     }
-    return mockIndexList.filter((row) => row.code.toLowerCase().includes(q))
-  }, [indexSearch])
-  const filteredIndexSummary = useMemo(
-    () => mockIndexSummary.filter((row) => row.date === selectedDate),
-    [selectedDate]
-  )
-  const filteredForeignFlow = useMemo(
-    () => mockForeignFlow.filter((row) => row.date === selectedDate),
-    [selectedDate]
-  )
+    return indexListRaw.filter((row) =>
+      String(row?.code ?? '')
+        .toLowerCase()
+        .includes(q)
+    )
+  }, [indexSearch, indexListRaw])
+  const filteredIndexSummary = (indexSummary.data ?? []) as {
+    code?: string
+    name?: string
+    date?: string
+    [k: string]: unknown
+  }[]
+  const foreignList = (foreignFlow.data ?? []) as {
+    date?: string
+    buyVolume?: number
+    buyValue?: number
+    sellVolume?: number
+    sellValue?: number
+    [k: string]: unknown
+  }[]
 
   return (
     <div className='dashboard-overview'>
-      <p className='dashboard-page-subtitle'>
-        Indices, sectoral, gainers/losers, foreign flow — one tab per dataset (mock)
-      </p>
-      <div
-        style={{
-          display: 'flex',
-          gap: '1rem',
-          marginBottom: '1rem',
-          flexWrap: 'wrap',
-          alignItems: 'center'
-        }}
-      >
-        <label style={{ fontWeight: 700, fontSize: '0.8125rem' }}>
+      <div className='dashboard-filter-row'>
+        <label className='dashboard-filter-label'>
           Index:
           <select
             value={selectedIndex}
             onChange={(e) => setSelectedIndex(e.target.value)}
-            style={filterInputStyle}
+            className='dashboard-filter-input'
           >
-            {mockIndexList.map((row) => <option key={row.code} value={row.code}>{row.code}
-            </option>)}
+            {indexListRaw.length
+              ? (
+                indexListRaw.map((row) => (
+                  <option key={String(row.code)} value={String(row.code ?? '')}>
+                    {String(row.code ?? row.name ?? '')}
+                  </option>
+                ))
+              )
+              : <option value={selectedIndex}>{selectedIndex}</option>}
           </select>
         </label>
-        <label style={{ fontWeight: 700, fontSize: '0.8125rem' }}>
+        <label className='dashboard-filter-label'>
           Date:
           <input
             type='date'
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            style={filterInputStyle}
+            className='dashboard-filter-input'
           />
         </label>
-        <label style={{ fontWeight: 700, fontSize: '0.8125rem' }}>
+        <label className='dashboard-filter-label'>
           Period (year–month):
           <input
             type='month'
             value={periodYearMonth}
             onChange={(e) => setPeriodYearMonth(e.target.value)}
-            style={filterInputStyle}
+            className='dashboard-filter-input'
           />
         </label>
       </div>
       <div className='dashboard-card page-section'>
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-          {(Object.keys(tabLabels) as MarketTab[]).map((t) => (
-            <button
-              key={t}
-              type='button'
-              className='dashboard-sync-btn'
-              style={{
-                background: tab === t ? 'var(--primary)' : 'var(--bg-subtle)',
-                color: tab === t ? 'white' : 'var(--text-main)'
-              }}
-              onClick={() => setTab(t)}
-            >
-              {tabLabels[t]}
-            </button>
-          ))}
+        <div className='dashboard-tabs-row'>
+          {(Object.keys(tabLabels) as Types.MarketTab[]).map((t) => {
+            const Icon = marketTabIcons[t]
+            return (
+              <button
+                key={t}
+                type='button'
+                className={tab === t ? 'dashboard-sync-btn is-primary' : 'dashboard-sync-btn'}
+                onClick={() => {
+                  setTab(t)
+                  setPage(1)
+                }}
+              >
+                <Icon size={18} aria-hidden />
+                {tabLabels[t]}
+              </button>
+            )
+          })}
         </div>
         {tab === 'chart' && (
           <>
             <h2 className='data-section-title'>Index Chart — {selectedIndex}</h2>
+            {indexChart.loading && <p>Loading chart…</p>}
+            {indexChart.error && !indexChart.loading && (
+              <p className='dashboard-error-text'>
+                {(indexChart.error as { error?: string }).error ?? 'Error'}
+              </p>
+            )}
             <div className='ingestion-chart-wrap'>
               <ResponsiveContainer width='100%' height='100%'>
                 <LineChart data={chartData}>
@@ -194,7 +299,7 @@ export function Market(): JSX.Element {
               placeholder='Search by index code...'
               value={indexSearch}
               onChange={(e) => setIndexSearch(e.target.value)}
-              style={searchInputStyle}
+              className='dashboard-search-input'
             />
             <h2 className='data-section-title'>Index List</h2>
             <div className='data-table-wrap'>
@@ -202,31 +307,45 @@ export function Market(): JSX.Element {
                 <thead>
                   <tr>
                     <th>Code</th>
+                    <th>Name</th>
                     <th className='num'>Close</th>
                     <th className='num'>Change</th>
-                    <th className='num'>%</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredIndexList.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td className='num'>{row.close}</td>
-                      <td
-                        className={'num ' + (row.percent.startsWith('+') ? 'positive' : 'negative')}
-                      >
-                        {row.change}
-                      </td>
-                      <td
-                        className={'num ' + (row.percent.startsWith('+') ? 'positive' : 'negative')}
-                      >
-                        {row.percent}
-                      </td>
-                    </tr>
-                  ))}
+                  {indices.loading
+                    ? (
+                      <tr>
+                        <td colSpan={4}>Loading…</td>
+                      </tr>
+                    )
+                    : filteredIndexList.length
+                    ? (
+                      filteredIndexList.map((row) => (
+                        <tr key={String(row.code)}>
+                          <td>{String(row.code ?? '—')}</td>
+                          <td>{String(row.name ?? '—')}</td>
+                          <td className='num'>{row.close != null ? String(row.close) : '—'}</td>
+                          <td className='num'>{row.change != null ? String(row.change) : '—'}</td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={4}>No indices</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={indices.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={indices.loading}
+              itemCount={filteredIndexList.length}
+            />
           </>
         )}
         {tab === 'indexSummary' && (
@@ -246,28 +365,61 @@ export function Market(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredIndexSummary.length
-                    ? filteredIndexSummary.map((row) => (
-                      <tr key={row.id}>
-                        <td>{row.code}</td>
-                        <td>{row.name}</td>
-                        <td>{row.date}</td>
-                        <td className='num'>{row.price.close.toLocaleString()}</td>
-                        <td className={'num ' + (row.price.percent >= 0 ? 'positive' : 'negative')}>
-                          {row.price.percent}%
-                        </td>
-                        <td className='num'>{row.trading.volume.toLocaleString()}</td>
-                        <td className='num'>{row.trading.value.toLocaleString()}</td>
+                  {indexSummary.loading
+                    ? (
+                      <tr>
+                        <td colSpan={8}>Loading…</td>
                       </tr>
-                    ))
+                    )
+                    : filteredIndexSummary.length
+                    ? (
+                      filteredIndexSummary.map((row, i) => {
+                        const price = row['price'] as
+                          | { close?: number; percent?: number }
+                          | undefined
+                        const trading = row['trading'] as
+                          | { volume?: number; value?: number }
+                          | undefined
+                        return (
+                          <tr key={(row as { id?: number }).id ?? i}>
+                            <td>{String(row.code ?? '—')}</td>
+                            <td>{String(row.name ?? '—')}</td>
+                            <td>{String(row.date ?? '—')}</td>
+                            <td className='num'>
+                              {price?.close != null ? price.close.toLocaleString() : '—'}
+                            </td>
+                            <td
+                              className={'num ' +
+                                (Number(price?.percent ?? 0) >= 0 ? 'positive' : 'negative')}
+                            >
+                              {price?.percent != null ? `${price.percent}%` : '—'}
+                            </td>
+                            <td className='num'>
+                              {trading?.volume != null ? trading.volume.toLocaleString() : '—'}
+                            </td>
+                            <td className='num'>
+                              {trading?.value != null ? trading.value.toLocaleString() : '—'}
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )
                     : (
                       <tr>
-                        <td colSpan={8}>No data for selected date (mock)</td>
+                        <td colSpan={8}>No data for selected date</td>
                       </tr>
                     )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={indexSummary.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={indexSummary.loading}
+              itemCount={filteredIndexSummary.length}
+            />
           </>
         )}
         {tab === 'sectoral' && (
@@ -282,17 +434,39 @@ export function Market(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {sectoralTable.map((row) => (
-                    <tr key={row.name}>
-                      <td>{row.name}</td>
-                      <td className={'num ' + (row.lastChange >= 0 ? 'positive' : 'negative')}>
-                        {row.lastChange}%
-                      </td>
-                    </tr>
-                  ))}
+                  {sectoral.loading
+                    ? (
+                      <tr>
+                        <td colSpan={2}>Loading…</td>
+                      </tr>
+                    )
+                    : sectoralTable.length
+                    ? (
+                      sectoralTable.map((row, i) => (
+                        <tr key={`${row.name}-${i}`}>
+                          <td>{row.name}</td>
+                          <td className={'num ' + (row.lastChange >= 0 ? 'positive' : 'negative')}>
+                            {row.lastChange}%
+                          </td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={2}>No sectoral data</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={sectoral.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={sectoral.loading}
+              itemCount={sectoralTable.length}
+            />
           </>
         )}
         {tab === 'gainers' && (
@@ -310,18 +484,50 @@ export function Market(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockTopGainers.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td>{row.name}</td>
-                      <td className='num'>{row.previous.toLocaleString()}</td>
-                      <td className='num'>{row.close.toLocaleString()}</td>
-                      <td className='num positive'>{row.percentage}%</td>
-                    </tr>
-                  ))}
+                  {topGainers.loading
+                    ? (
+                      <tr>
+                        <td colSpan={5}>Loading…</td>
+                      </tr>
+                    )
+                    : (topGainers.data ?? []).length
+                    ? (
+                      (
+                        (topGainers.data ?? []) as {
+                          code?: string
+                          name?: string
+                          previous?: number
+                          close?: number
+                          percentage?: number
+                        }[]
+                      ).map((row, i) => (
+                        <tr key={row.code ?? i}>
+                          <td>{String(row.code ?? '—')}</td>
+                          <td>{String(row.name ?? '—')}</td>
+                          <td className='num'>{(Number(row.previous) || 0).toLocaleString()}</td>
+                          <td className='num'>{(Number(row.close) || 0).toLocaleString()}</td>
+                          <td className='num positive'>
+                            {row.percentage != null ? `${row.percentage}%` : '—'}
+                          </td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={5}>No data</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={topGainers.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={topGainers.loading}
+              itemCount={(topGainers.data ?? []).length}
+            />
           </>
         )}
         {tab === 'losers' && (
@@ -339,23 +545,57 @@ export function Market(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {mockTopLosers.map((row) => (
-                    <tr key={row.code}>
-                      <td>{row.code}</td>
-                      <td>{row.name}</td>
-                      <td className='num'>{row.previous.toLocaleString()}</td>
-                      <td className='num'>{row.close.toLocaleString()}</td>
-                      <td className='num negative'>{row.percentage}%</td>
-                    </tr>
-                  ))}
+                  {topLosers.loading
+                    ? (
+                      <tr>
+                        <td colSpan={5}>Loading…</td>
+                      </tr>
+                    )
+                    : (topLosers.data ?? []).length
+                    ? (
+                      (
+                        (topLosers.data ?? []) as {
+                          code?: string
+                          name?: string
+                          previous?: number
+                          close?: number
+                          percentage?: number
+                        }[]
+                      ).map((row, i) => (
+                        <tr key={row.code ?? i}>
+                          <td>{String(row.code ?? '—')}</td>
+                          <td>{String(row.name ?? '—')}</td>
+                          <td className='num'>{(Number(row.previous) || 0).toLocaleString()}</td>
+                          <td className='num'>{(Number(row.close) || 0).toLocaleString()}</td>
+                          <td className='num negative'>
+                            {row.percentage != null ? `${row.percentage}%` : '—'}
+                          </td>
+                        </tr>
+                      ))
+                    )
+                    : (
+                      <tr>
+                        <td colSpan={5}>No data</td>
+                      </tr>
+                    )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={topLosers.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={topLosers.loading}
+              itemCount={(topLosers.data ?? []).length}
+            />
           </>
         )}
         {tab === 'foreignFlow' && (
           <>
-            <h2 className='data-section-title'>Foreign / Domestic Flow — date: {selectedDate}</h2>
+            <h2 className='data-section-title'>
+              Foreign / Domestic Flow — period: {periodYearMonth}
+            </h2>
             <div className='data-table-wrap'>
               <table className='data-table'>
                 <thead>
@@ -368,24 +608,48 @@ export function Market(): JSX.Element {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredForeignFlow.length
-                    ? filteredForeignFlow.map((row) => (
-                      <tr key={row.date}>
-                        <td>{row.date}</td>
-                        <td className='num'>{row.buyVolume.toLocaleString()}</td>
-                        <td className='num'>{row.buyValue.toLocaleString()}</td>
-                        <td className='num'>{row.sellVolume.toLocaleString()}</td>
-                        <td className='num'>{row.sellValue.toLocaleString()}</td>
+                  {foreignFlow.loading
+                    ? (
+                      <tr>
+                        <td colSpan={5}>Loading…</td>
                       </tr>
-                    ))
+                    )
+                    : foreignList.length
+                    ? (
+                      foreignList.map((row, i) => (
+                        <tr key={String(row.date ?? i)}>
+                          <td>{String(row.date ?? '—')}</td>
+                          <td className='num'>
+                            {(Number(row.buyVolume ?? row['buyVolume']) || 0).toLocaleString()}
+                          </td>
+                          <td className='num'>
+                            {(Number(row.buyValue ?? row['buyValue']) || 0).toLocaleString()}
+                          </td>
+                          <td className='num'>
+                            {(Number(row.sellVolume ?? row['sellVolume']) || 0).toLocaleString()}
+                          </td>
+                          <td className='num'>
+                            {(Number(row.sellValue ?? row['sellValue']) || 0).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))
+                    )
                     : (
                       <tr>
-                        <td colSpan={5}>No data for selected date (mock)</td>
+                        <td colSpan={5}>No data for period</td>
                       </tr>
                     )}
                 </tbody>
               </table>
             </div>
+            <Components.PaginationBar
+              page={page}
+              pageSize={pageSize}
+              total={foreignFlow.meta?.total ?? 0}
+              onPageChange={setPage}
+              loading={foreignFlow.loading}
+              itemCount={foreignList.length}
+            />
           </>
         )}
       </div>
