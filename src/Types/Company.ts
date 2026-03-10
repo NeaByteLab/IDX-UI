@@ -39,6 +39,13 @@ export interface AnnouncementItem {
   type?: string
 }
 
+export interface CompanyAnnouncementRow {
+  id?: number
+  title?: string
+  date?: string
+  type?: string
+}
+
 export interface FinancialRatioItem {
   code: string
   per?: number
