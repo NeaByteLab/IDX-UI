@@ -1,17 +1,9 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { Menu, X } from 'lucide-react'
 import { SidebarNav } from '@app/Layout/SidebarNav.tsx'
+import type * as Types from '@app/Types/index.ts'
 
-export function Sidebar({
-  isOpen,
-  isMobile,
-  onToggle
-}: {
-  isOpen: boolean
-  isMobile: boolean
-  onToggle: () => void
-}): JSX.Element {
+export function Sidebar({ isOpen, isMobile, onToggle }: Types.SidebarProps): JSX.Element {
   const closedClass = isOpen ? '' : 'is-closed'
   const mobileClass = isMobile ? 'is-mobile' : ''
   return (

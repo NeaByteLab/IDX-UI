@@ -1,10 +1,10 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import * as Lucide from 'lucide-react'
-import { navItems } from '@app/Config/index.ts'
+import * as Config from '@app/Config/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+const iconMap: Record<string, Types.IconComponent> = {
   LayoutDashboard: Lucide.LayoutDashboard,
   TrendingUp: Lucide.TrendingUp,
   Building2: Lucide.Building2,
@@ -21,7 +21,7 @@ export function SidebarNav(): JSX.Element {
   return (
     <nav className='dashboard-sidebar-nav' aria-label='Main navigation'>
       <ul className='dashboard-sidebar-nav-list'>
-        {navItems.map((item) => {
+        {Config.navItems.map((item) => {
           const Icon = iconMap[item.icon]
           const isActive = item.path === '/'
             ? location.pathname === '/'

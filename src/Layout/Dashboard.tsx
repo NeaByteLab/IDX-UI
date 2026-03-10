@@ -1,28 +1,37 @@
-import React, { Suspense } from 'react'
-import type { JSX } from 'react'
+import React, { type JSX, Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { RefreshCw, Server } from 'lucide-react'
-import { useSidebarState } from '@app/Hooks/index.ts'
-import { Sidebar } from '@app/Layout/Sidebar.tsx'
+import { RefreshCw } from 'lucide-react'
+import * as Hooks from '@app/Hooks/index.ts'
 import { Header } from '@app/Layout/Header.tsx'
-import { useSyncStatus } from '@app/Hooks/index.ts'
-import { navItems } from '@app/Config/index.ts'
+import { Sidebar } from '@app/Layout/Sidebar.tsx'
+import * as Config from '@app/Config/index.ts'
 
 export function DashboardLayout(): JSX.Element {
   const location = useLocation()
-  const [isSidebarOpen, setIsSidebarOpen, isMobile] = useSidebarState()
-  const [syncStatus, triggerSync] = useSyncStatus()
+  const [isSidebarOpen, setIsSidebarOpen, isMobile] = Hooks.useSidebarState()
+  const [syncStatus, triggerSync] = Hooks.useSyncStatus()
   const isOverview = location.pathname === '/'
-  const current = navItems.find((n) => n.path === location.pathname) ??
+  const current = Config.navItems.find((n) => n.path === location.pathname) ??
     (location.pathname.startsWith('/companies/')
-      ? navItems.find((n) => n.path === '/companies')
+      ? Config.navItems.find((n) => n.path === '/companies')
       : null) ??
-    navItems[0]
+    Config.navItems[0]
   const pageTitle = isOverview
     ? 'Market Data Intelligence'
     : location.pathname.startsWith('/companies/')
     ? 'Company Detail'
     : (current?.label ?? 'Dashboard')
+  const pageSubtitleByPath: Record<string, string> = {
+    '/market': 'Indices, sectoral, gainers/losers, foreign flow — one tab per dataset',
+    '/trading':
+      'Stock summary, most active, industry, broker — one tab per dataset. Stock/Broker use date = first day of period.',
+    '/companies': 'Company directory, suspended, new/delisted/relisted',
+    '/participants': 'Brokers, participants, primary dealers — one tab per dataset',
+    '/calendar': 'Market holidays & events by date'
+  }
+  const companyDetailSubtitle = 'Profile, announcements, financials, trading, corporate actions'
+  const pageSubtitle = pageSubtitleByPath[location.pathname] ??
+    (location.pathname.startsWith('/companies/') ? companyDetailSubtitle : '')
   return (
     <div className='dashboard-layout-root'>
       {isMobile && isSidebarOpen && (
@@ -45,10 +54,7 @@ export function DashboardLayout(): JSX.Element {
             <div className='dashboard-content-header'>
               <div>
                 <h1 className='dashboard-page-title'>{pageTitle}</h1>
-                <p className='dashboard-page-subtitle'>
-                  <Server size={12} className='dashboard-page-subtitle-icon' aria-hidden />
-                  Live Data Pipeline v1.0.4 • Deno & Drizzle ORM
-                </p>
+                {pageSubtitle ? <p className='dashboard-page-description'>{pageSubtitle}</p> : null}
               </div>
               <button
                 type='button'
