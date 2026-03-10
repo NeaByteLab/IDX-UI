@@ -1,22 +1,27 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { TrendingDown, TrendingUp } from 'lucide-react'
-import type { MiniChartPoint } from '@app/Types/index.ts'
+import type * as Types from '@app/Types/index.ts'
 import { Line, LineChart, ResponsiveContainer } from 'recharts'
+
+const defaultChartData = [
+  { v: 10 },
+  { v: 15 },
+  { v: 8 },
+  { v: 12 },
+  { v: 20 },
+  { v: 18 },
+  {
+    v: 25
+  }
+]
 
 export function MiniWidget({
   title,
   value,
   change,
   isUp,
-  chartData = [{ v: 10 }, { v: 15 }, { v: 8 }, { v: 12 }, { v: 20 }, { v: 18 }, { v: 25 }]
-}: {
-  title: string
-  value: string
-  change: string
-  isUp: boolean
-  chartData?: MiniChartPoint[]
-}): JSX.Element {
+  chartData = defaultChartData
+}: Types.MiniWidgetProps): JSX.Element {
   const strokeColor = isUp ? '#22c55e' : '#ef4444'
   return (
     <div className='mini-widget'>
@@ -31,13 +36,7 @@ export function MiniWidget({
       <div className='mini-widget-chart'>
         <ResponsiveContainer width='100%' height='100%'>
           <LineChart data={chartData}>
-            <Line
-              type='monotone'
-              dataKey='v'
-              stroke={strokeColor}
-              strokeWidth={2}
-              dot={false}
-            />
+            <Line type='monotone' dataKey='v' stroke={strokeColor} strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>

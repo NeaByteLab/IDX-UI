@@ -1,1 +1,1 @@
-export { PlaceholderPanel } from '@app/Components/Placeholder/Panel.tsx'
+export * from '@app/Components/Placeholder/Panel.tsx'

@@ -1,15 +1,8 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { Clock, Newspaper } from 'lucide-react'
-import type { CompanyNewsItem } from '@app/Types/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-export function CompanyNewsCard({
-  items,
-  onViewAll
-}: {
-  items: CompanyNewsItem[]
-  onViewAll?: () => void
-}): JSX.Element {
+export function CompanyNewsCard({ items, onViewAll }: Types.CompanyNewsCardProps): JSX.Element {
   return (
     <div className='dashboard-card'>
       <div className='news-card-header'>

@@ -1,14 +1,10 @@
-import React from 'react'
-import type { JSX } from 'react'
-import type { PipelineHealthRow } from '@app/Types/index.ts'
+import React, { type JSX } from 'react'
+import type * as Types from '@app/Types/index.ts'
 
 export function PipelineHealthCard({
   items,
   onConfig
-}: {
-  items: PipelineHealthRow[]
-  onConfig?: () => void
-}): JSX.Element {
+}: Types.PipelineHealthCardProps): JSX.Element {
   return (
     <div className='dashboard-card'>
       <h3 className='pipeline-card-title'>Pipeline Health</h3>

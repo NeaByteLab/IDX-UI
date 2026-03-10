@@ -1,5 +1,5 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
+import type * as Types from '@app/Types/index.ts'
 
 export function PlaceholderPanel({
   icon: Icon,
@@ -7,17 +7,11 @@ export function PlaceholderPanel({
   description,
   spin = false,
   className = ''
-}: {
-  icon: React.ComponentType<{ size?: number }>
-  title: string
-  description: string
-  spin?: boolean
-  className?: string
-}): JSX.Element {
+}: Types.PlaceholderPanelProps): JSX.Element {
   const baseClass = 'placeholder-panel'
-  const fullClass = [baseClass, spin ? 'animate-spin-slow' : '', className].filter(Boolean).join(
-    ' '
-  )
+  const fullClass = [baseClass, spin ? 'animate-spin-slow' : '', className]
+    .filter(Boolean)
+    .join(' ')
   return (
     <div className={fullClass}>
       <span className='placeholder-panel-icon'>

@@ -1,16 +1,12 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { Database, Server } from 'lucide-react'
+import type * as Types from '@app/Types/index.ts'
 
 export function StorageHealthCard({
   value,
   percent,
   description = 'Current database payload across 12 synchronized tables.'
-}: {
-  value: string
-  percent: number
-  description?: string
-}): JSX.Element {
+}: Types.StorageHealthCardProps): JSX.Element {
   return (
     <div className='storage-card'>
       <div className='storage-card-inner'>

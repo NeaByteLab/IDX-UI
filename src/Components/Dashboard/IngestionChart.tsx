@@ -1,6 +1,5 @@
-import React from 'react'
-import type { JSX } from 'react'
-import type { SyncHistoryPoint } from '@app/Types/index.ts'
+import React, { type JSX } from 'react'
+import type * as Types from '@app/Types/index.ts'
 import {
   Area,
   AreaChart,
@@ -11,11 +10,7 @@ import {
   YAxis
 } from 'recharts'
 
-export function DataIngestionChart({
-  data
-}: {
-  data: SyncHistoryPoint[]
-}): JSX.Element {
+export function DataIngestionChart({ data }: Types.DataIngestionChartProps): JSX.Element {
   return (
     <div className='ingestion-chart-wrap'>
       <ResponsiveContainer width='100%' height='100%'>
@@ -33,14 +28,8 @@ export function DataIngestionChart({
             tickLine={false}
             tick={{ fill: '#9CA3AF', fontSize: 10 }}
           />
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: '#9CA3AF', fontSize: 10 }}
-          />
-          <Tooltip
-            contentStyle={{ borderRadius: '16px', border: 'none', fontSize: '11px' }}
-          />
+          <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF', fontSize: 10 }} />
+          <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', fontSize: '11px' }} />
           <Area
             type='monotone'
             dataKey='value'

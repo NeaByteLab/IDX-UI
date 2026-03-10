@@ -1,15 +1,11 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { Megaphone } from 'lucide-react'
-import type { IdxAnnouncementItem } from '@app/Types/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
 export function IdxAnnouncementCard({
   items,
   onRecent
-}: {
-  items: IdxAnnouncementItem[]
-  onRecent?: () => void
-}): JSX.Element {
+}: Types.IdxAnnouncementCardProps): JSX.Element {
   return (
     <div className='dashboard-card'>
       <div className='news-card-header'>

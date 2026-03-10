@@ -1,22 +1,21 @@
-import React from 'react'
-import type { JSX } from 'react'
+import React, { type JSX } from 'react'
 import { ArrowUpRight, Zap } from 'lucide-react'
-import type { QuickInsightItem } from '@app/Types/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
+const iconMap: Record<string, Types.IconComponent> = {
   ArrowUpRight,
   Zap
 }
 
-export function QuickInsightsCard({ items }: { items: QuickInsightItem[] }): JSX.Element {
+export function QuickInsightsCard({ items }: Types.QuickInsightsCardProps): JSX.Element {
   return (
     <div className='quick-insights-card'>
       <h4 className='quick-insights-title'>Quick Insights</h4>
       <div className='quick-insights-grid'>
-        {items.map((item) => {
+        {items.map((item, i) => {
           const Icon = iconMap[item.icon]
           return (
-            <div key={item.label} className='quick-insight-tile'>
+            <div key={`${item.label}-${item.symbol}-${i}`} className='quick-insight-tile'>
               {Icon != null
                 ? (
                   <span className='quick-insight-tile-icon-wrap'>
