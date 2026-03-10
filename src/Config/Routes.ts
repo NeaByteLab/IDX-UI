@@ -14,8 +14,6 @@ export const paths = {
   serverError: '/500'
 } as const
 
-export type PathId = keyof Omit<typeof paths, 'companyDetail'>
-
 export const dashboardRoutePaths: readonly string[] = [
   paths.home,
   paths.market,

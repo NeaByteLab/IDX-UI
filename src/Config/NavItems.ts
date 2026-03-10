@@ -1,13 +1,7 @@
-import { paths } from '@app/Config/Routes.ts'
+import { paths } from '@app/Config/index.ts'
+import type * as Types from '@app/Types/index.ts'
 
-export interface NavItem {
-  id: string
-  path: string
-  label: string
-  icon: string
-}
-
-export const navItems: NavItem[] = [
+export const navItems: Types.NavItem[] = [
   { id: 'overview', path: paths.home, label: 'Dashboard Overview', icon: 'LayoutDashboard' },
   { id: 'market', path: paths.market, label: 'Market Data', icon: 'TrendingUp' },
   { id: 'companies', path: paths.companies, label: 'Companies List', icon: 'Building2' },
