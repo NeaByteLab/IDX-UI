@@ -1,0 +1,93 @@
+{
+  "name": "@neabyte/idx-ui",
+  "type": "module",
+  "license": "MIT",
+  "exports": "./src/Views/Main.tsx",
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "checkJs": false,
+    "exactOptionalPropertyTypes": true,
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
+    "lib": ["deno.ns", "deno.worker", "dom", "dom.asynciterable"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noErrorTruncation": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true
+  },
+  "fmt": {
+    "bracePosition": "sameLine",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "proseWrap": "preserve",
+    "semiColons": false,
+    "singleBodyPosition": "nextLine",
+    "singleQuote": true,
+    "spaceAround": false,
+    "spaceSurroundingProperties": true,
+    "trailingCommas": "never",
+    "useBraces": "always",
+    "useTabs": false
+  },
+  "lint": {
+    "include": ["src/"],
+    "rules": {
+      "tags": ["fresh", "jsr", "jsx", "react", "recommended", "workspace"],
+      "exclude": ["no-console", "no-external-import", "prefer-ascii", "prefer-primordials"]
+    }
+  },
+  "lock": true,
+  "nodeModulesDir": "auto",
+  "test": {
+    "include": ["tests/**/*.ts"],
+    "exclude": ["tests/**/*.d.ts"]
+  },
+  "tasks": {
+    "check": "deno fmt src/ && deno lint src/ && deno check src/",
+    "test": "deno fmt tests/ && deno lint tests/ && deno test --no-check",
+    "build": "deno run -A --node-modules-dir npm:vite build --mode production",
+    "dev": "deno run -A --node-modules-dir npm:vite",
+    "prod": "deno task check && deno task build && deno task preview",
+    "preview": "deno run -A --node-modules-dir npm:vite preview"
+  },
+  "imports": {
+    "@app/": "./src/",
+    "@scripts/": "./scripts/",
+    "@types/react": "npm:@types/react@^19.2.14",
+    "@types/react-dom": "npm:@types/react-dom@^19.2.3",
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.1.4",
+    "react": "npm:react@^19.2.4",
+    "react-dom": "npm:react-dom@^19.2.4",
+    "react-dom/client": "npm:react-dom@^19.2.4/client",
+    "react-router-dom": "npm:react-router-dom@^7.13.1",
+    "vite": "npm:vite@^7.3.1"
+  },
+  "publish": {
+    "exclude": [
+      "*.bench.ts",
+      "*.spec.ts",
+      "*.test.ts",
+      ".github/",
+      "bench/",
+      "build.config.ts",
+      "coverage/",
+      "tests/"
+    ]
+  }
+}

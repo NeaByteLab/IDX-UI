@@ -1,0 +1,83 @@
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: var(--bg-app);
+}
+
+.error-page-inner {
+  max-width: 28rem;
+  text-align: center;
+}
+
+.error-page-code {
+  margin: 0 0 0.25rem;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.error-page-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.error-page-message {
+  margin: 0 0 1.5rem;
+  font-size: 0.9375rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.error-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.error-page-link:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.error-page-btn {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-main);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.error-page-btn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
