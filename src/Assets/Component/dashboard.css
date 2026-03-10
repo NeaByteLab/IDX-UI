@@ -18,6 +18,12 @@
   color: var(--text-muted);
 }
 
+.dashboard-page-description {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0.25rem 0 0 0;
+}
+
 .dashboard-content-header {
   display: flex;
   flex-direction: column;
@@ -34,7 +40,7 @@
 }
 
 .dashboard-sync-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
@@ -45,6 +51,8 @@
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
   box-shadow: var(--shadow);
+  background: var(--bg-subtle);
+  color: var(--text-main);
 }
 
 .dashboard-sync-btn:active {
@@ -645,4 +653,113 @@
 
 .page-section {
   margin-bottom: 2rem;
+}
+
+.dashboard-tabs-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.dashboard-filter-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.dashboard-filter-label {
+  font-weight: 700;
+  font-size: 0.8125rem;
+}
+
+.dashboard-input {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+}
+
+.dashboard-input-min-200 {
+  min-width: 200px;
+}
+
+.dashboard-filter-input {
+  margin-left: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+}
+
+.dashboard-search-input {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-light);
+  min-width: 200px;
+}
+
+.dashboard-error-text {
+  color: var(--error, #b91c1c);
+}
+
+.dashboard-loading-text {
+  margin-bottom: 1rem;
+}
+
+.dashboard-back-link-block {
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.data-table th.col-width-56 {
+  width: 56px;
+}
+
+.data-table th.col-width-140 {
+  width: 140px;
+}
+
+.data-table td.align-middle {
+  vertical-align: middle;
+}
+
+.dashboard-logo-img {
+  display: block;
+  object-fit: contain;
+}
+
+.data-section-title.mt-lg {
+  margin-top: 1.5rem;
+}
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination-bar-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.pagination-bar-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pagination-bar-page {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.pagination-bar .dashboard-sync-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
