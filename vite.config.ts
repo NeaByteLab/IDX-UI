@@ -12,9 +12,22 @@ const dirName = path.dirname(fileURLToPath(import.meta.url))
  */
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 50260,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:50270',
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    port: 50260
+  },
   resolve: {
     alias: {
-      '@app': path.resolve(dirName, 'src')
+      '@app': path.resolve(dirName, 'src'),
+      '@data': path.resolve(dirName, 'data')
     }
   },
   css: {
@@ -26,32 +39,6 @@ export default defineConfig({
   build: {
     sourcemap: false,
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 300,
-    rollupOptions: {
-      output: {
-        manualChunks(id: string) {
-          if (id.includes('react-dom')) return 'react-dom'
-          if (id.includes('react-router')) return 'react-router'
-          if (id.includes('scheduler')) return 'scheduler'
-          if (id.includes('react')) return 'react'
-          if (id.includes('node_modules') || id.includes('.deno')) {
-            const nodeModulesMatch = id.match(/node_modules[\\/](@[^/]+[\\/][^/]+|[^/]+)/)
-            if (nodeModulesMatch) {
-              const name = nodeModulesMatch[1]?.replace(/^@/, '').replace(/\//g, '-')
-              if (name) return name
-            }
-            const denoPathMatch = id.match(
-              /[\\/]\.deno[\\/](@[^/]+?\+[^/]+?|[^/]+?)(?:@[\d.]+|[\\/]|$)/
-            )
-            if (denoPathMatch) {
-              const name = denoPathMatch[1]?.replace(/^@/, '').replace(/\+/g, '-')
-              if (name) return name
-            }
-            return 'vendor'
-          }
-          return undefined
-        }
-      }
-    }
+    chunkSizeWarningLimit: 1000
   }
 })

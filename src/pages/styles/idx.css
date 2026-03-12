@@ -1,0 +1,21 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+@import '@app/pages/styles/base.css';
+@import '@app/pages/styles/card.css';
+@import '@app/pages/styles/dashboard.css';
+@import '@app/pages/styles/filter.css';
+@import '@app/pages/styles/home.css';
+@import '@app/pages/styles/layout.css';
+@import '@app/pages/styles/margin.css';
+@import '@app/pages/styles/modal.css';
+@import '@app/pages/styles/padding.css';
+@import '@app/pages/styles/sector.css';
+@import '@app/pages/styles/table.css';
+@import '@app/pages/styles/utilities.css';
+@import '@app/pages/styles/variables.css';

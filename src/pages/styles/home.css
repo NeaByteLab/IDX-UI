@@ -1,0 +1,198 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-home-article h2,
+.idx-home-article h3 {
+  color: var(--idx-deep);
+}
+
+.idx-home-article h3 {
+  margin-top: var(--idx-space-4);
+}
+
+.idx-home-article strong {
+  font-weight: 700;
+  color: var(--idx-deep);
+}
+
+.idx-home-article .idx-home-note {
+  margin: var(--idx-space-12) var(--idx-space-0);
+  padding: var(--idx-space-12) var(--idx-space-16);
+  font-size: var(--idx-text-sm);
+  line-height: 1.6;
+  color: var(--idx-deep);
+  background: var(--idx-primary-soft);
+  border-left: 3px solid var(--idx-primary);
+  border-radius: 0 var(--idx-radius-sm) var(--idx-radius-sm) 0;
+}
+
+.idx-home-article .idx-home-note em {
+  font-style: italic;
+  color: var(--idx-deep);
+}
+
+.idx-home-article .idx-home-formula {
+  margin-bottom: var(--idx-space-12);
+  padding: var(--idx-space-12) var(--idx-space-16);
+  font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Mono', monospace;
+  font-size: var(--idx-text-sm);
+  line-height: 1.5;
+  color: var(--idx-deep);
+  background: rgba(0, 0, 0, 0.04);
+  border-left: 3px solid var(--idx-primary);
+  border-radius: 0 var(--idx-radius-sm) var(--idx-radius-sm) 0;
+}
+
+.idx-home-pillars {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: var(--idx-space-32);
+}
+
+.idx-home-pillar-card {
+  flex: 1 1 160px;
+  min-width: 140px;
+  padding: var(--idx-space-20);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.idx-home-pillar-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--idx-space-8);
+}
+
+.idx-home-pillar-head .idx-home-pillar-icon {
+  color: var(--idx-primary);
+}
+
+.idx-home-pillar-label {
+  font-weight: 700;
+  font-size: var(--idx-text-sm);
+}
+
+.idx-home-tabs-card {
+  width: 100%;
+  overflow: hidden;
+}
+
+.idx-tabs-in-card {
+  margin: var(--idx-space-0);
+  border-radius: 0;
+  padding: var(--idx-space-12) var(--idx-space-16);
+}
+
+.idx-tab-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--idx-space-6);
+}
+
+.idx-home-article {
+  padding-block: var(--idx-space-12);
+  padding-inline: var(--idx-space-24);
+}
+
+.idx-home-h2 {
+  font-size: var(--idx-text-lg);
+  font-weight: 800;
+  margin: var(--idx-space-0) var(--idx-space-0) var(--idx-space-12);
+  color: var(--idx-deep);
+}
+
+.idx-home-h3 {
+  font-size: var(--idx-text-base);
+  font-weight: 700;
+  margin: var(--idx-space-24) var(--idx-space-0) var(--idx-space-8);
+  color: var(--idx-deep);
+}
+
+.idx-home-p {
+  margin-bottom: var(--idx-space-16);
+  line-height: 1.7;
+  color: var(--idx-deep);
+}
+
+.idx-home-p.idx-home-p-mb0 {
+  margin-bottom: 0;
+}
+
+.idx-home-p.idx-home-p-mb8 {
+  margin-bottom: var(--idx-space-8);
+}
+
+.idx-home-p.idx-home-p-mb20 {
+  margin-bottom: var(--idx-space-20);
+}
+
+.idx-home-ul {
+  margin-top: var(--idx-space-8);
+  margin-bottom: var(--idx-space-16);
+  padding-left: var(--idx-space-20);
+  line-height: 1.7;
+  color: var(--idx-deep);
+}
+
+.idx-home-ul.idx-home-ul-mb0 {
+  margin-bottom: 0;
+}
+
+.idx-home-ul.idx-home-ul-mb20 {
+  margin-bottom: var(--idx-space-20);
+}
+
+.idx-home-ol {
+  margin-bottom: var(--idx-space-16);
+  padding-left: var(--idx-space-24);
+  line-height: 1.7;
+  color: var(--idx-deep);
+}
+
+.idx-home-li,
+.idx-home-ul > li,
+.idx-home-ol > li {
+  margin-bottom: var(--idx-space-8);
+}
+
+.idx-home-li.idx-home-li-mb16 {
+  margin-bottom: var(--idx-space-16);
+}
+
+.idx-about-card {
+  padding: var(--idx-space-24);
+  width: 100%;
+}
+
+.idx-about-card .idx-dashboard-title {
+  flex-wrap: nowrap;
+}
+
+.idx-about-title {
+  margin-bottom: var(--idx-space-8);
+}
+
+.idx-about-intro {
+  color: var(--idx-text-secondary);
+  font-size: var(--idx-text-base);
+  line-height: 1.7;
+}
+
+.idx-home-note.idx-home-note-mt24 {
+  margin-top: var(--idx-space-24);
+  margin-bottom: var(--idx-space-0);
+}
+
+.idx-home-pillar-desc {
+  margin: var(--idx-space-0);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--idx-text-secondary);
+}

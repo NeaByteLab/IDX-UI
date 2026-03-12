@@ -1,0 +1,56 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --idx-primary: #cc3e3e;
+  --idx-primary-soft: #fde8e8;
+  --idx-deep: #1e1b1b;
+  --idx-white: #ffffff;
+  --idx-bg: #fcfcfc;
+  --idx-border: #f1f1f1;
+  --idx-text-muted: #9ca3af;
+  --idx-text-secondary: #6b7280;
+  --idx-up: #059669;
+  --idx-down: #cc3e3e;
+  --idx-radius-sm: 12px;
+  --idx-radius-md: 16px;
+  --idx-radius-lg: 24px;
+  --idx-space-0: 0;
+  --idx-space-2: 2px;
+  --idx-space-4: 4px;
+  --idx-space-6: 6px;
+  --idx-space-8: 8px;
+  --idx-space-10: 10px;
+  --idx-space-12: 12px;
+  --idx-space-14: 14px;
+  --idx-space-16: 16px;
+  --idx-space-18: 18px;
+  --idx-space-20: 20px;
+  --idx-space-22: 22px;
+  --idx-space-24: 24px;
+  --idx-space-26: 26px;
+  --idx-space-28: 28px;
+  --idx-space-30: 30px;
+  --idx-space-32: 32px;
+  --idx-space-34: 34px;
+  --idx-space-36: 36px;
+  --idx-space-38: 38px;
+  --idx-space-40: 40px;
+  --idx-space-42: 42px;
+  --idx-space-44: 44px;
+  --idx-space-46: 46px;
+  --idx-space-48: 48px;
+  --idx-text-xs: 10px;
+  --idx-text-sm: 12px;
+  --idx-text-base: 14px;
+  --idx-text-lg: 1.125rem;
+  --idx-text-xl: 1.25rem;
+  --idx-text-2xl: 1.375rem;
+}

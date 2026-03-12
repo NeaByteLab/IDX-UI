@@ -1,0 +1,211 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-detail-sections {
+  margin-bottom: var(--idx-space-24);
+}
+
+.idx-detail-block {
+  margin-bottom: var(--idx-space-16);
+}
+
+.idx-detail-composite-cell {
+  font-weight: 800;
+}
+
+.idx-chart-container {
+  height: 180px;
+  width: 100%;
+  margin-top: var(--idx-space-12);
+}
+
+.idx-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 20px;
+  width: 100%;
+  min-width: 0;
+}
+
+.idx-detail-item label {
+  font-size: var(--idx-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--idx-text-muted);
+  display: block;
+  margin-bottom: var(--idx-space-2);
+}
+
+.idx-detail-item span {
+  font-size: var(--idx-text-base);
+  font-weight: 700;
+  color: var(--idx-deep);
+  word-break: break-word;
+}
+
+.idx-detail-item-full {
+  grid-column: 1 / -1;
+}
+
+.idx-detail-section {
+  min-width: 0;
+  width: 100%;
+  align-self: stretch;
+  justify-self: stretch;
+  box-sizing: border-box;
+}
+
+.idx-detail-section:nth-child(1) {
+  grid-column: 1 / 4;
+  grid-row: 1;
+}
+
+.idx-detail-section:nth-child(2) {
+  grid-column: 4;
+  grid-row: 1;
+}
+
+.idx-detail-section:nth-child(3) {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.idx-detail-section:nth-child(4) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.idx-detail-section:nth-child(5) {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.idx-detail-section-title {
+  font-size: var(--idx-text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--idx-text-muted);
+  margin: var(--idx-space-0) var(--idx-space-0) var(--idx-space-8) var(--idx-space-0);
+  padding-bottom: var(--idx-space-4);
+  border-bottom: 1px solid var(--idx-border);
+}
+
+.idx-detail-sections {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 24px;
+}
+
+.idx-detail-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--idx-text-sm);
+  margin-top: var(--idx-space-6);
+}
+
+.idx-detail-table th,
+.idx-detail-table td {
+  width: 25%;
+  padding: var(--idx-space-8) var(--idx-space-12);
+  text-align: left;
+  border: 1px solid var(--idx-border);
+}
+
+.idx-detail-table th {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--idx-text-muted);
+  background: rgba(249, 250, 251, 0.6);
+}
+
+.idx-detail-table td {
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .idx-detail-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .idx-detail-section:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+.idx-modal {
+  display: flex;
+  flex-direction: column;
+  background: var(--idx-white);
+  border-radius: var(--idx-radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 1140px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: hidden;
+}
+
+.idx-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--idx-space-20);
+}
+
+.idx-modal-close {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f9fafb;
+  border-radius: var(--idx-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--idx-text-muted);
+  transition: background 0.2s, color 0.2s;
+}
+
+.idx-modal-close:hover {
+  background: var(--idx-primary-soft);
+  color: var(--idx-primary);
+}
+
+.idx-modal-header {
+  flex-shrink: 0;
+  padding: var(--idx-space-16) var(--idx-space-20);
+  border-bottom: 1px solid var(--idx-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.idx-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--idx-space-24);
+}
+
+.idx-modal-title {
+  font-size: var(--idx-text-xl);
+  font-weight: 800;
+  margin: var(--idx-space-0);
+}
+
+.idx-modal-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

@@ -1,0 +1,141 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: var(--idx-space-24);
+}
+
+.idx-dashboard-subtitle {
+  font-size: var(--idx-text-base);
+  color: var(--idx-text-muted);
+  margin-top: var(--idx-space-4);
+}
+
+.idx-dashboard-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--idx-text-2xl);
+  font-weight: 800;
+  color: var(--idx-deep);
+  letter-spacing: -0.02em;
+  margin: var(--idx-space-0);
+}
+
+.idx-header-refresh {
+  margin-left: var(--idx-space-20);
+  padding: var(--idx-space-10);
+}
+
+.idx-header-refresh:hover {
+  background: var(--idx-primary-soft);
+  color: var(--idx-primary);
+}
+
+.idx-header-refresh.is-loading svg {
+  opacity: 0.5;
+}
+
+.idx-header-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.idx-header-stat-label {
+  font-size: var(--idx-text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--idx-text-muted);
+  line-height: 1.2;
+}
+
+.idx-header-stat-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--idx-border);
+  margin: var(--idx-space-0) var(--idx-space-20);
+  flex-shrink: 0;
+}
+
+.idx-header-stat-value {
+  font-size: var(--idx-text-lg);
+  font-weight: 800;
+  color: var(--idx-deep);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.idx-header-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: var(--idx-white);
+  border: 1px solid var(--idx-border);
+  border-radius: var(--idx-radius-lg);
+  padding: var(--idx-space-12) var(--idx-space-8) var(--idx-space-12) var(--idx-space-20);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.03);
+}
+
+.idx-stat-card {
+  padding: var(--idx-space-24);
+  border-radius: var(--idx-radius-lg);
+  background: var(--idx-white);
+  border: 1px solid var(--idx-border);
+}
+
+.idx-stat-card-label {
+  font-size: var(--idx-text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--idx-text-muted);
+}
+
+.idx-stat-card-value {
+  font-size: var(--idx-text-lg);
+  font-weight: 800;
+  color: var(--idx-deep);
+  margin-top: var(--idx-space-8);
+}
+
+.idx-tab {
+  font-size: var(--idx-text-sm);
+  font-weight: 700;
+  padding: var(--idx-space-8) var(--idx-space-16);
+  border-radius: var(--idx-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--idx-text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.idx-tab:hover {
+  color: var(--idx-deep);
+}
+
+.idx-tab.idx-tab-active {
+  background: var(--idx-primary);
+  color: var(--idx-white);
+}
+
+.idx-tabs {
+  display: flex;
+  gap: 4px;
+  background: #f9fafb;
+  padding: var(--idx-space-4);
+  border-radius: var(--idx-radius-lg);
+}

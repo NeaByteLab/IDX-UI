@@ -1,7 +1,0 @@
-export * from '@app/Components/Dashboard/NewsCard.tsx'
-export * from '@app/Components/Dashboard/IngestionChart.tsx'
-export * from '@app/Components/Dashboard/AnnouncementCard.tsx'
-export * from '@app/Components/Dashboard/MiniWidget.tsx'
-export * from '@app/Components/Dashboard/PipelineCard.tsx'
-export * from '@app/Components/Dashboard/InsightsCard.tsx'
-export * from '@app/Components/Dashboard/StorageCard.tsx'

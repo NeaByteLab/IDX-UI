@@ -1,0 +1,242 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: var(--idx-text-sm);
+  font-weight: 700;
+  padding: var(--idx-space-10) var(--idx-space-20);
+  border-radius: var(--idx-radius-lg);
+  border: 1px solid var(--idx-border);
+  background: var(--idx-white);
+  color: var(--idx-deep);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.idx-btn:hover {
+  background: #f9fafb;
+  border-color: var(--idx-primary-soft);
+  color: var(--idx-primary);
+}
+
+.idx-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: var(--idx-text-sm);
+  padding: var(--idx-space-10) var(--idx-space-20);
+  border-radius: var(--idx-radius-lg);
+  background: var(--idx-primary);
+  border: none;
+  color: var(--idx-white);
+  font-weight: 800;
+  box-shadow: 0 4px 14px -3px rgba(204, 62, 62, 0.35);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.idx-btn-primary:hover {
+  background: #b03636;
+  color: var(--idx-white);
+  border: none;
+  box-shadow: 0 6px 20px -4px rgba(204, 62, 62, 0.4);
+}
+
+.idx-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+}
+
+.idx-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--idx-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.idx-checkbox-label input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--idx-primary);
+}
+
+.idx-filter-actions {
+  margin-top: var(--idx-space-24);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.idx-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 24px;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .idx-filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.idx-filter-group {
+  padding: var(--idx-space-16);
+  border: 1px solid var(--idx-border);
+  border-radius: var(--idx-radius-lg);
+  background: var(--idx-bg);
+  min-width: 0;
+}
+
+.idx-filter-group .idx-form-group .idx-input,
+.idx-filter-group .idx-form-group .idx-select {
+  min-width: 0;
+  width: 100%;
+}
+
+.idx-filter-group-desc {
+  font-size: var(--idx-text-xs);
+  color: var(--idx-text-muted);
+  margin: var(--idx-space-0) var(--idx-space-0) var(--idx-space-12) var(--idx-space-0);
+  line-height: 1.4;
+}
+
+.idx-filter-group-fields {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 16px;
+  min-width: 0;
+}
+
+.idx-filter-group-fields .idx-form-group {
+  flex: 1 1 0;
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+.idx-filter-group-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--idx-text-sm);
+  font-weight: 800;
+  color: var(--idx-deep);
+  margin: var(--idx-space-0) var(--idx-space-0) var(--idx-space-4) var(--idx-space-0);
+}
+
+.idx-filter-panel {
+  padding: var(--idx-space-0);
+  min-width: 0;
+}
+
+.idx-filter-panel .idx-filter-grid {
+  padding: var(--idx-space-12) var(--idx-space-24) var(--idx-space-24) var(--idx-space-24);
+}
+
+.idx-filter-panel .idx-filter-actions {
+  padding: var(--idx-space-0) var(--idx-space-24) var(--idx-space-24) var(--idx-space-24);
+}
+
+.idx-filter-panel-chevron {
+  font-size: var(--idx-text-sm);
+  color: var(--idx-text-muted);
+  line-height: 1;
+}
+
+.idx-filter-panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--idx-text-lg);
+  font-weight: 800;
+  color: var(--idx-deep);
+  margin: var(--idx-space-0);
+}
+
+.idx-filter-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--idx-space-20) var(--idx-space-24);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  border-radius: var(--idx-radius-lg);
+  transition: background 0.2s;
+}
+
+.idx-form-group {
+  margin-bottom: var(--idx-space-16);
+}
+
+.idx-form-label {
+  display: block;
+  font-size: var(--idx-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--idx-text-muted);
+  margin-bottom: var(--idx-space-6);
+}
+
+.idx-input {
+  width: 100%;
+  font-size: var(--idx-text-sm);
+  font-weight: 600;
+  padding: var(--idx-space-10) var(--idx-space-16);
+  border-radius: var(--idx-radius-lg);
+  border: 1px solid var(--idx-border);
+  background: var(--idx-white);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.idx-input:focus {
+  border-color: var(--idx-primary);
+  box-shadow: 0 0 0 3px rgba(204, 62, 62, 0.15);
+}
+
+.idx-input::placeholder {
+  color: var(--idx-text-muted);
+}
+
+.idx-select {
+  appearance: none;
+  width: 100%;
+  font-size: var(--idx-text-sm);
+  font-weight: 600;
+  padding: var(--idx-space-10) var(--idx-space-32) var(--idx-space-10) var(--idx-space-16);
+  border-radius: var(--idx-radius-lg);
+  border: 1px solid var(--idx-border);
+  background: var(--idx-white)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  outline: none;
+  cursor: pointer;
+}
+
+.idx-select:focus {
+  border-color: var(--idx-primary);
+}

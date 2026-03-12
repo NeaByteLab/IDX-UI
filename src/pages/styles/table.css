@@ -1,0 +1,181 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--idx-text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: var(--idx-space-6) var(--idx-space-12);
+  border-radius: 9999px;
+}
+
+.idx-badge-down {
+  background: var(--idx-primary-soft);
+  color: var(--idx-down);
+}
+
+.idx-badge-neutral {
+  background: #f3f4f6;
+  color: var(--idx-text-muted);
+}
+
+.idx-badge-up {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.idx-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: var(--idx-space-16) var(--idx-space-24);
+  border-top: 1px solid var(--idx-border);
+}
+
+.idx-pct-down {
+  color: var(--idx-down);
+  font-weight: 700;
+}
+
+.idx-pct-up {
+  color: var(--idx-up);
+  font-weight: 700;
+}
+
+.idx-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.idx-table thead {
+  background: rgba(249, 250, 251, 0.5);
+}
+
+.idx-table th {
+  font-size: var(--idx-text-xs);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--idx-text-muted);
+  padding: var(--idx-space-16) var(--idx-space-24);
+  text-align: left;
+}
+
+.idx-table th.idx-table-th-right {
+  text-align: right;
+}
+
+.idx-table th.idx-table-col-kode,
+.idx-table td.idx-table-col-kode {
+  min-width: 72px;
+}
+
+.idx-table th.idx-table-col-nama,
+.idx-table td.idx-table-col-nama {
+  min-width: 140px;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.idx-table th.idx-table-col-sektor,
+.idx-table td.idx-table-col-sektor {
+  min-width: 120px;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.idx-table th.idx-table-th-center {
+  text-align: center;
+}
+
+.idx-table td {
+  padding: var(--idx-space-20) var(--idx-space-24);
+  font-size: var(--idx-text-base);
+  border-top: 1px solid #f9fafb;
+}
+
+.idx-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.idx-table tbody tr:hover {
+  background: var(--idx-primary-soft);
+}
+
+.idx-table .idx-table-td-right {
+  text-align: right;
+}
+
+.idx-table .idx-table-td-center {
+  text-align: center;
+}
+
+.idx-table-search {
+  position: relative;
+  padding: var(--idx-space-16) var(--idx-space-20);
+  border-bottom: 1px solid var(--idx-border);
+}
+
+.idx-table-search-icon {
+  position: absolute;
+  left: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--idx-text-muted);
+  pointer-events: none;
+}
+
+.idx-table-search-input {
+  width: 100%;
+  font-size: var(--idx-text-sm);
+  font-weight: 600;
+  padding: var(--idx-space-10) var(--idx-space-16) var(--idx-space-10) 44px;
+  border: 1px solid var(--idx-border);
+  border-radius: var(--idx-radius-lg);
+  background: var(--idx-white);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.idx-table-search-input::placeholder {
+  color: var(--idx-text-muted);
+}
+
+.idx-table-search-input:focus {
+  border-color: var(--idx-primary);
+  box-shadow: 0 0 0 3px rgba(204, 62, 62, 0.15);
+}
+
+.idx-table-wrap {
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.idx-table-code-bold {
+  font-weight: 800;
+}
+
+.idx-pagination-info {
+  font-size: var(--idx-text-sm);
+  color: var(--idx-text-muted);
+}
+
+.idx-pagination-actions {
+  display: flex;
+  gap: 8px;
+}

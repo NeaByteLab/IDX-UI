@@ -2,6 +2,9 @@
 .deno/
 deno.lock
 
+# Data / DB
+data/
+
 # Vite / Node
 .vite/
 node_modules/

@@ -1,0 +1,132 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-grid-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  min-width: 0;
+}
+
+.idx-grid-main > div,
+.idx-grid-main > aside {
+  min-width: 0;
+}
+
+.idx-header {
+  background: var(--idx-white);
+  border-bottom: 1px solid var(--idx-border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.idx-header-inner {
+  width: 100%;
+  margin: var(--idx-space-0) auto;
+  padding: var(--idx-space-0) var(--idx-space-24);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.idx-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.idx-logo-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--idx-radius-sm);
+  background: linear-gradient(135deg, var(--idx-primary), #b03636);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--idx-white);
+}
+
+.idx-logo-text {
+  font-size: var(--idx-text-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--idx-deep);
+}
+
+.idx-logo-text span {
+  color: var(--idx-primary);
+}
+
+.idx-main {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: var(--idx-space-0) auto;
+  padding: var(--idx-space-40) var(--idx-space-24);
+  overflow-x: hidden;
+}
+
+.idx-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #f9fafb;
+  padding: var(--idx-space-4);
+  border-radius: var(--idx-radius-lg);
+}
+
+.idx-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--idx-text-sm);
+  font-weight: 700;
+  padding: var(--idx-space-10) var(--idx-space-24);
+  border-radius: var(--idx-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--idx-text-muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+}
+
+.idx-nav-item:hover {
+  color: var(--idx-deep);
+}
+
+.idx-nav-item.idx-nav-item-active {
+  background: var(--idx-primary);
+  color: var(--idx-white);
+}
+
+@media (max-width: 768px) {
+  .idx-nav-item-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: var(--idx-space-0);
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .idx-nav-item {
+    padding: var(--idx-space-10) 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .idx-grid-main {
+    grid-template-columns: 2fr 1fr;
+  }
+}

@@ -67,14 +67,19 @@
   "tasks": {
     "check": "deno fmt src/ && deno lint src/ && deno check src/",
     "test": "deno fmt tests/ && deno lint tests/ && deno test --no-check",
-    "build": "deno run -A --node-modules-dir npm:vite build --mode production",
-    "dev": "deno run -A --node-modules-dir npm:vite",
-    "prod": "deno task check && deno task build && deno task preview",
-    "preview": "deno run -A --node-modules-dir npm:vite preview"
+    "api:dev": "deno run -A --unstable-cron --watch src/server/index.ts",
+    "api:serve": "deno run -A --unstable-cron src/server/index.ts",
+    "db:init": "deno run -A src/server/Bootstrap.ts",
+    "db:generate": "deno run -A npm:drizzle-kit generate",
+    "db:push": "deno run -A npm:drizzle-kit push",
+    "ui:build": "deno run -A --node-modules-dir npm:vite build --mode production",
+    "ui:preview": "deno run -A --node-modules-dir npm:vite preview",
+    "ui:dev": "deno run -A --node-modules-dir npm:vite"
   },
   "imports": {
     "@app/": "./src/",
-    "@scripts/": "./scripts/",
+    "@data/": "./data/",
+    "@neabyte/deserve": "jsr:@neabyte/deserve@^0.8.0",
     "@types/react": "npm:@types/react@^19.2.14",
     "@types/react-dom": "npm:@types/react-dom@^19.2.3",
     "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.1.4",
@@ -84,7 +89,10 @@
     "react-router-dom": "npm:react-router-dom@^7.13.1",
     "lucide-react": "npm:lucide-react@^0.577.0",
     "recharts": "npm:recharts@^3.8.0",
-    "vite": "npm:vite@^7.3.1"
+    "vite": "npm:vite@^7.3.1",
+    "@libsql/client": "npm:@libsql/client@^0.17.0",
+    "drizzle-orm": "npm:drizzle-orm@^0.45.1",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.9"
   },
   "publish": {
     "exclude": [

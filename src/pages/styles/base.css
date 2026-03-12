@@ -1,0 +1,24 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--idx-bg);
+  color: var(--idx-deep);
+  margin: var(--idx-space-0);
+  -webkit-font-smoothing: antialiased;
+}
+
+.idx-page {
+  min-height: 100vh;
+  background-color: var(--idx-bg);
+}

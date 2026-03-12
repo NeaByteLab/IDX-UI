@@ -1,0 +1,60 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-sector-card {
+  padding: var(--idx-space-24);
+}
+
+.idx-sector-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--idx-space-16);
+}
+
+.idx-sector-chart-wrap {
+  min-width: 0;
+  width: 100%;
+  margin-bottom: var(--idx-space-16);
+}
+
+.idx-sector-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--idx-space-12) var(--idx-space-16);
+  border-radius: var(--idx-radius-md);
+  margin-bottom: var(--idx-space-6);
+  font-size: var(--idx-text-sm);
+  font-weight: 600;
+}
+
+.idx-sector-item.idx-sector-up {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.idx-sector-item.idx-sector-down {
+  background: var(--idx-primary-soft);
+  color: var(--idx-down);
+}
+
+.idx-sector-item.idx-sector-neutral {
+  background: #f3f4f6;
+  color: var(--idx-text-muted);
+}
+
+.idx-sector-list {
+  list-style: none;
+  margin: var(--idx-space-0);
+  padding: var(--idx-space-0);
+}
+
+.idx-sector-pct {
+  font-weight: 800;
+}

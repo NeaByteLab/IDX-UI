@@ -1,0 +1,32 @@
+/**
+ * Copyright (c) 2026 IDX Screener by @NeaByteLab (https://neabyte.com)
+ * SPDX-License-Identifier: MIT
+ *
+ * Open to remote work & consulting.
+ * Fullstack developer with a focus on security and experience in trading systems.
+ */
+
+.idx-card {
+  background: var(--idx-white);
+  border: 1px solid var(--idx-border);
+  border-radius: var(--idx-radius-lg);
+  box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.idx-card:hover {
+  box-shadow: 0 20px 40px -10px rgba(204, 62, 62, 0.08);
+  border-color: var(--idx-primary-soft);
+}
+
+.idx-card-title {
+  font-size: var(--idx-text-lg);
+  font-weight: 800;
+  color: var(--idx-deep);
+}
+
+.idx-card-title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

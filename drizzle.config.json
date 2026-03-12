@@ -1,0 +1,8 @@
+{
+  "out": "./data/drizzle",
+  "schema": "./src/server/schemas/index.ts",
+  "dialect": "sqlite",
+  "dbCredentials": {
+    "url": "./data/database.sqlite"
+  }
+}
