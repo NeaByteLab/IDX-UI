@@ -6,18 +6,6 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
-export interface ClientOptions {
-  signal?: AbortSignal
-}
-
-export interface GeneralResponse {
-  stockList: { code: string; name: string }[]
-  industries: string[]
-  sectors: string[]
-  subSectors: string[]
-  subIndustries: string[]
-}
-
 export interface CandidateRow {
   code: string
   name: string | null
@@ -46,6 +34,27 @@ export interface CandidateRowWithSectorRank extends CandidateRow {
   sectorPercentile: number
 }
 
+export type CandidateTableRow = CandidateRow | CandidateRowWithSectorRank
+
+export interface CandidatesParams {
+  date?: string
+  limit?: number
+  offset?: number
+  defaultFilter?: boolean
+  excludeNotation?: boolean
+  excludeCorpAction?: boolean
+  excludeUma?: boolean
+  minValue?: number
+  minVolume?: number
+  perMin?: number
+  perMax?: number
+  roeMin?: number
+  derMax?: number
+  momentumWeek?: 26 | 52
+  momentumMin?: number
+  withSectorRank?: boolean
+}
+
 export interface CandidatesResponse {
   date: number
   totalCount: number
@@ -55,46 +64,39 @@ export interface CandidatesResponse {
   data: CandidateRow[] | CandidateRowWithSectorRank[]
 }
 
-export type ForeignPeriodDays = 30 | 60 | 90 | 180 | 360
-
-export interface ScreenerRsiItem {
-  code: string
-  name: string | null
-  sector: string | null
-  rsi: number | null
+export interface CandidatesTableProps {
+  data: CandidateTableRow[]
+  limit: number
+  offset: number
+  totalCount: number
+  totalCountLabel?: string
+  onPage: (newOffset: number) => void
+  onRowClick: (code: string) => void
+  searchValue?: string
+  onSearchChange?: (searchQuery: string) => void
 }
 
-export interface ScreenerRsiResponse {
+export interface ClientOptions {
+  signal?: AbortSignal
+}
+
+export interface DashboardHeaderProps {
+  totalCount: number
   date: number
-  period: number
-  data: { byCode: ScreenerRsiItem[]; bySector: Record<string, ScreenerRsiItem[]> }
+  onRefresh: () => void
+  loading?: boolean
 }
 
-export interface ScreenerBidOfferItem {
-  sector: string
-  bidVolume: number
-  offerVolume: number
-  count: number
-}
+export type DetailTab = 'fundamental' | 'technical'
 
-export interface ScreenerBidOfferResponse {
-  date: number
-  data: ScreenerBidOfferItem[]
-}
-
-export interface RsiRow {
-  date: number
-  rsi: number | null
-}
-
-export interface RsiResponse {
-  code: string
-  start: number
-  end: number
-  period: number
-  data: RsiRow[]
-  sector: string | null
-  sectorData: RsiRow[]
+export interface FilterPanelProps {
+  params: CandidatesParams
+  sectors: string[]
+  sectorFilter: string
+  onSectorFilterChange: (sector: string) => void
+  onParamsChange: (partialParams: Partial<CandidatesParams>) => void
+  onApply: () => void
+  onDefaultFilter: () => void
 }
 
 export interface ForeignFlowRow {
@@ -103,6 +105,8 @@ export interface ForeignFlowRow {
   sell: number | null
   net: number | null
 }
+
+export type ForeignPeriodDays = 30 | 60 | 90 | 180 | 360
 
 export interface ForeignResponse {
   code: string
@@ -117,26 +121,103 @@ export interface ForeignResponse {
   }
 }
 
+export interface GeneralResponse {
+  stockList: { code: string; name: string }[]
+  industries: string[]
+  sectors: string[]
+  subSectors: string[]
+  subIndustries: string[]
+}
+
+export interface HistoryBidOfferByDateEntry {
+  date: number
+  sectors: Record<string, HistorySectorAggregate>
+}
+
+export interface HistoryBidOfferResponse {
+  start: number
+  end: number
+  byDate: HistoryBidOfferByDateEntry[]
+  bySector: HistoryBidOfferSectorItem[]
+}
+
+export interface HistoryBidOfferSectorItem {
+  sector: string
+  totalBid: number
+  totalOffer: number
+  dayCount: number
+  avgBid: number
+  avgOffer: number
+  ratio: number | null
+}
+
+export interface HistorySectorAggregate {
+  bidVolume: number
+  offerVolume: number
+  count: number
+}
+
+export type HomeTab = 'methodology' | 'score' | 'filter' | 'howTo'
+
+export type MainAnalysisTab = 'fundamental' | 'technical'
+
+export interface OhlcApiRow extends StockDetailOhlcRow {
+  bidVolume: number | null
+  offerVolume: number | null
+}
+
+export interface RsiResponse {
+  code: string
+  start: number
+  end: number
+  period: number
+  data: RsiRow[]
+  sector: string | null
+  sectorData: RsiRow[]
+}
+
+export interface RsiRow {
+  date: number
+  rsi: number | null
+}
+
+export interface ScreenerBidOfferItem {
+  sector: string
+  bidVolume: number
+  offerVolume: number
+  count: number
+}
+
+export interface ScreenerBidOfferResponse {
+  date: number
+  data: ScreenerBidOfferItem[]
+}
+
+export interface ScreenerRsiItem {
+  code: string
+  name: string | null
+  sector: string | null
+  rsi: number | null
+}
+
+export interface ScreenerRsiResponse {
+  date: number
+  period: number
+  data: { byCode: ScreenerRsiItem[]; bySector: Record<string, ScreenerRsiItem[]> }
+}
+
+export interface SectorStrengthProps {
+  data: SectorStrengthRow[] | null
+  loading: boolean
+  week: 26 | 52
+  onWeekChange: (week: 26 | 52) => void
+}
+
 export interface SectorStrengthRow {
   sector: string
   avgMomentum: number
   count: number
   rank: number
-}
-
-export interface StockDetailOhlcRow {
-  date: number
-  open: number | null
-  high: number | null
-  low: number | null
-  close: number | null
-  volume: number | null
-  change: number | null
-}
-
-export interface OhlcApiRow extends StockDetailOhlcRow {
-  bidVolume: number | null
-  offerVolume: number | null
 }
 
 export interface StockDetail {
@@ -169,62 +250,6 @@ export interface StockDetail {
   ohlc: StockDetailOhlcRow[]
 }
 
-export interface CandidatesParams {
-  date?: string
-  limit?: number
-  offset?: number
-  defaultFilter?: boolean
-  excludeNotation?: boolean
-  excludeCorpAction?: boolean
-  excludeUma?: boolean
-  minValue?: number
-  minVolume?: number
-  perMin?: number
-  perMax?: number
-  roeMin?: number
-  derMax?: number
-  momentumWeek?: 26 | 52
-  momentumMin?: number
-  withSectorRank?: boolean
-}
-
-export type MainAnalysisTab = 'fundamental' | 'technical'
-
-export type DetailTab = 'fundamental' | 'technical'
-
-export type HomeTab = 'methodology' | 'score' | 'filter' | 'howTo'
-
-export type CandidateTableRow = CandidateRow | CandidateRowWithSectorRank
-
-export interface FilterPanelProps {
-  params: CandidatesParams
-  sectors: string[]
-  sectorFilter: string
-  onSectorFilterChange: (sector: string) => void
-  onParamsChange: (partialParams: Partial<CandidatesParams>) => void
-  onApply: () => void
-  onDefaultFilter: () => void
-}
-
-export interface CandidatesTableProps {
-  data: CandidateTableRow[]
-  limit: number
-  offset: number
-  totalCount: number
-  totalCountLabel?: string
-  onPage: (newOffset: number) => void
-  onRowClick: (code: string) => void
-  searchValue?: string
-  onSearchChange?: (searchQuery: string) => void
-}
-
-export interface DashboardHeaderProps {
-  totalCount: number
-  date: number
-  onRefresh: () => void
-  loading?: boolean
-}
-
 export interface StockDetailModalProps {
   detail: StockDetail | null
   loading: boolean
@@ -232,9 +257,12 @@ export interface StockDetailModalProps {
   onClose: () => void
 }
 
-export interface SectorStrengthProps {
-  data: SectorStrengthRow[] | null
-  loading: boolean
-  week: 26 | 52
-  onWeekChange: (week: 26 | 52) => void
+export interface StockDetailOhlcRow {
+  date: number
+  open: number | null
+  high: number | null
+  low: number | null
+  close: number | null
+  volume: number | null
+  change: number | null
 }
