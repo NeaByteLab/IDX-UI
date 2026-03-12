@@ -347,6 +347,34 @@ export interface ScreenerBidOfferResponse {
   data: ScreenerBidOfferItem[]
 }
 
+export interface HistorySectorAggregate {
+  bidVolume: number
+  offerVolume: number
+  count: number
+}
+
+export interface HistoryBidOfferByDateEntry {
+  date: number
+  sectors: Record<string, HistorySectorAggregate>
+}
+
+export interface HistoryBidOfferSectorItem {
+  sector: string
+  totalBid: number
+  totalOffer: number
+  dayCount: number
+  avgBid: number
+  avgOffer: number
+  ratio: number | null
+}
+
+export interface HistoryBidOfferResponse {
+  start: number
+  end: number
+  byDate: HistoryBidOfferByDateEntry[]
+  bySector: HistoryBidOfferSectorItem[]
+}
+
 export interface LiquiditySnapshot {
   value: number | null
   volume: number | null
