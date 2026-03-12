@@ -10,21 +10,21 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 <tr>
 <td width="50%" style="text-align: center"><img src="./preview/1.png" alt="Screener" width="100%"/>
 <br/>
-<strong>Screener</strong>: filter kandidat, fundamental, valuasi, momentum, dan kekuatan sektor donut chart 26w/52w.
+<strong>Screener</strong>: filter kandidat, fundamental, valuasi, momentum, kekuatan sektor 26w/52w.
 </td>
 <td width="50%" style="text-align: center"><img src="./preview/2.png" alt="Detail saham" width="100%"/>
 <br/>
-<strong>Detail saham</strong>: modal analisa fundamental, profitabilitas, valuasi, skor, momentum, dan chart harga.
+<strong>Detail saham</strong>: modal fundamental, profitabilitas, valuasi, skor, momentum, chart harga.
 </td>
 </tr>
 <tr>
 <td width="50%" style="text-align: center"><img src="./preview/3.png" alt="Analisa teknikal" width="100%"/>
 <br/>
-<strong>Analisa teknikal</strong>: RSI per sektor dan chart bid vs offer per sektor hari ini, ringkasan snapshot periode satu hari.
+<strong>Analisa teknikal</strong>: RSI per sektor, chart bid vs offer per sektor hari ini, ringkasan snapshot satu hari.
 </td>
 <td width="50%" style="text-align: center"><img src="./preview/4.png" alt="Historical bid vs offer" width="100%"/>
 <br/>
-<strong>Historical bid vs offer</strong>: tabel agregat per sektor, periode 1W–12M, rasio bid/offer dan rata-rata per hari.
+<strong>Historical bid vs offer</strong>: tabel agregat per sektor, periode 1W–12M, rasio bid/offer, rata-rata hari.
 </td>
 </tr>
 </table>
