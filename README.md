@@ -81,6 +81,10 @@ deno task ui:dev
 # Akses di `http://127.0.0.1:50260` atau `http://localhost:50260`
 ```
 
+## Dokumentasi
+
+- **[Referensi API](API.md)** — Endpoint, parameter, return, dan contoh `curl` untuk integrasi & testing.
+
 ## Build & Tes
 
 **Cek** — format, lint, dan typecheck:
