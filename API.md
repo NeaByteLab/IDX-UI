@@ -126,6 +126,29 @@ curl -s 'http://127.0.0.1:50270/api/general'
 
 ---
 
+### History Bid-Offer
+
+```http
+GET /api/history/bid-offer
+```
+
+- Parameter query:
+  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
+  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
+  - `limit` `<number>`: (Opsional) Maksimal rentang hari. Bawaan: 365. Jika (end − start) melebihi limit, start digeser sehingga rentang = limit hari.
+- Return: `{ start, end, byDate: Array<{ date, sectors: Record<string, { bidVolume, offerVolume, count }> }>, bySector: Array<{ sector, totalBid, totalOffer, dayCount, avgBid, avgOffer, ratio }> }`
+- Deskripsi: Data historis agregat bid/offer per sektor: per tanggal (byDate) dan agregat per sektor (bySector) dengan total, rata-rata per hari, dan rasio bid/offer. Data diambil dari summary dalam rentang tanggal.
+- Error: `400` jika start atau end tidak valid (yyyymmdd) atau end < start.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/history/bid-offer?start=20250201&end=20250301'
+curl -s 'http://127.0.0.1:50270/api/history/bid-offer?start=20240101&end=20250301&limit=90'
+```
+
+---
+
 ### OHLC
 
 ```http
@@ -245,7 +268,7 @@ GET /api/sector/strength
 
 - Parameter query:
   - `source` `<string>`: (Opsional) `ohlc` = hitung return dari OHLC summary; kosong = pakai week26PC/week52PC dari screener.
-  - `week` `<number>`: (Opsional) Periode minggu: 26 atau 52.
+  - `week` `<number>`: (Opsional) Periode minggu: 26 atau 52. Bawaan: 26.
 - Return: `Array<{ sector, avgMomentum, count, rank }>`
 - Deskripsi: Rata-rata momentum per sektor, diurutkan per ranking.
 

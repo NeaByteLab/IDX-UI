@@ -6,27 +6,47 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 
 [![Deno](https://img.shields.io/badge/deno-2.7.4-000000?logo=deno&logoColor=ffcb00)](https://deno.com) [![price](https://img.shields.io/badge/price-free-22c55e)](https://github.com/NeaByteLab/IDX-UI) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-![Preview](./preview/images.png)
-
+<table align="center">
+<tr>
+<td width="50%" style="text-align: center"><img src="./preview/1.png" alt="Screener" width="100%"/>
+<br/>
+<strong>Screener</strong>: filter kandidat, fundamental, valuasi, momentum, dan kekuatan sektor donut chart 26w/52w.
+</td>
+<td width="50%" style="text-align: center"><img src="./preview/2.png" alt="Detail saham" width="100%"/>
+<br/>
+<strong>Detail saham</strong>: modal analisa fundamental, profitabilitas, valuasi, skor, momentum, dan chart harga.
+</td>
+</tr>
+<tr>
+<td width="50%" style="text-align: center"><img src="./preview/3.png" alt="Analisa teknikal" width="100%"/>
+<br/>
+<strong>Analisa teknikal</strong>: RSI per sektor dan chart bid vs offer per sektor hari ini, ringkasan snapshot periode satu hari.
+</td>
+<td width="50%" style="text-align: center"><img src="./preview/4.png" alt="Historical bid vs offer" width="100%"/>
+<br/>
+<strong>Historical bid vs offer</strong>: tabel agregat per sektor, periode 1W–12M, rasio bid/offer dan rata-rata per hari.
+</td>
+</tr>
+</table>
 </div>
+
+## Fitur Utama
+
+- **Screener** — Filter saham fundamental dan momentum, eksklusi risiko, pagination.
+- **Skor komposit** — Skor gabungan value, quality, momentum; bobot diatur; peringkat sektor.
+- **Ringkasan teknikal di Screener** — RSI dan bid/offer per sektor, chart satu hari.
+- **Kekuatan sektor** — Pie chart kekuatan sektor, periode 26 atau 52 minggu.
+- **Detail saham** — Modal tab fundamental dan teknikal: OHLC, RSI, foreign flow.
+- **Historical bid/offer** — Agregat bid/offer per sektor, rasio dan rata-rata, periode 1W–12M.
+- **API + SQLite** — Backend Deno, data di SQLite, cron tiap jam fetch data IDX.
 
 > [!NOTE]
 > Sedang dalam pengembangan
 
-# Roadmap (Draft)
+## Roadmap (Draft)
 
-- [ ] Analisa Teknikal
 - [ ] Export Data
 - [ ] Watchlist
-
-## Fitur Utama
-
-- **Analisa teknikal** — Ringkasan RSI, volume dan bid/offer per sektor.
-- **Screener** — Filter saham pakai fundamental dan momentum, bisa eksklusi risiko.
-- **Skor komposit** — Satu skor gabungan value, quality, momentum; bobot bisa diatur.
-- **Detail saham** — Modal detail dengan tab fundamental & teknikal (OHLC, RSI, foreign flow).
-- **Kekuatan sektor** — Pie chart kekuatan sektor, periode 26 atau 52 minggu.
-- **API + SQLite** — Backend Deno simpan data screener dan summary di SQLite lokal.
 
 ## Instalasi
 
