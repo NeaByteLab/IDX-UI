@@ -25,20 +25,25 @@ curl -s 'http://127.0.0.1:50270/api/health'
 
 ---
 
-### General
+### Bid-Offer
 
 ```http
-GET /api/general
+GET /api/:code/bid-offer
 ```
 
-- Parameter: tidak ada
-- Return: `{ stockList, industries, sectors, subSectors, subIndustries }`
-- Deskripsi: Metadata untuk filter: daftar saham (code, name) dan daftar unik industri, sektor, subsektor, subindustri.
+- Parameter path:
+  - `code` `<string>`: Kode saham (contoh: BBCA, GOTO).
+- Parameter query:
+  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
+  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
+- Return: `Array<{ date, bidVolume, offerVolume }>`
+- Deskripsi: Deret waktu volume bid dan offer untuk satu emiten dalam rentang tanggal. Subset dari OHLC (hanya field bid/offer).
+- Error: `400` jika code kosong atau start/end tidak valid.
 
 **Contoh:**
 
 ```bash
-curl -s 'http://127.0.0.1:50270/api/general'
+curl -s 'http://127.0.0.1:50270/api/BBCA/bid-offer?start=20250101&end=20250301'
 ```
 
 ---
@@ -80,6 +85,113 @@ curl -s 'http://127.0.0.1:50270/api/candidates?defaultFilter=true&limit=10&offse
 
 ---
 
+### Foreign
+
+```http
+GET /api/:code/foreign
+```
+
+- Parameter path:
+  - `code` `<string>`: Kode saham (contoh: BBCA, GOTO).
+- Parameter query:
+  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
+  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
+- Return: `{ code, start, end, data: Array<{ date, buy, sell, net }>, summary: { totalBuy, totalSell, totalNet, dayCount } }`
+- Deskripsi: Statistik aliran asing (buy, sell, net) per hari dalam rentang tanggal; plus agregat total dan jumlah hari.
+- Error: `400` jika code kosong atau start/end tidak valid.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/BBCA/foreign?start=20250101&end=20250301'
+```
+
+---
+
+### General
+
+```http
+GET /api/general
+```
+
+- Parameter: tidak ada
+- Return: `{ stockList, industries, sectors, subSectors, subIndustries }`
+- Deskripsi: Metadata untuk filter: daftar saham (code, name) dan daftar unik industri, sektor, subsektor, subindustri.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/general'
+```
+
+---
+
+### OHLC
+
+```http
+GET /api/:code/ohlc
+```
+
+- Parameter path:
+  - `code` `<string>`: Kode saham (contoh: BBCA, GOTO).
+- Parameter query:
+  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
+  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
+- Return: `Array<{ date, open, high, low, close, volume, change, bidVolume, offerVolume }>`
+- Deskripsi: Data OHLC + volume + change + bid/offer volume untuk satu emiten dalam rentang tanggal.
+- Error: `400` jika code kosong atau start/end tidak valid.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/BBCA/ohlc?start=20250101&end=20250301'
+```
+
+---
+
+### RSI
+
+```http
+GET /api/:code/rsi
+```
+
+- Parameter path:
+  - `code` `<string>`: Kode saham (contoh: BBCA, GOTO).
+- Parameter query:
+  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
+  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
+- Return: `{ code, start, end, period, data: Array<{ date, rsi }>, sector, sectorData: Array<{ date, rsi }> }`
+- Deskripsi: Deret waktu RSI(14) untuk satu emiten dalam rentang tanggal. Jika saham punya sektor, `sectorData` berisi RSI rata-rata sektor per hari (berdasarkan saham-saham dalam sektor itu).
+- Error: `400` jika code kosong atau start/end tidak valid.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/BBCA/rsi?start=20250101&end=20250301'
+```
+
+---
+
+### Screener Bid-Offer
+
+```http
+GET /api/screener/bid-offer
+```
+
+- Parameter query:
+  - `date` `<string>`: (Opsional) Tanggal referensi (yyyymmdd). Bawaan: hari terakhir yang ada di summary.
+- Return: `{ date, data: Array<{ sector, bidVolume, offerVolume, count }> }` — agregat volume bid dan offer per sektor untuk satu hari. `data` diurutkan berdasarkan total volume (bid + offer) menurun.
+- Deskripsi: Agregat volume bid dan offer per sektor (universe screener) untuk tanggal tertentu. Berguna untuk chart Bid vs Offer per sektor di Analisa Teknikal.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/screener/bid-offer'
+curl -s 'http://127.0.0.1:50270/api/screener/bid-offer?date=20260312'
+```
+
+---
+
 ### Screener Ranked
 
 ```http
@@ -104,6 +216,27 @@ curl -s 'http://127.0.0.1:50270/api/screener/ranked?limit=20&offset=0&withSector
 
 ---
 
+### Screener RSI
+
+```http
+GET /api/screener/rsi
+```
+
+- Parameter query:
+  - `date` `<string>`: (Opsional) Tanggal referensi (yyyymmdd). Bawaan: hari terakhir yang ada di summary.
+  - `period` `<number>`: (Opsional) Periode RSI (1–100). Bawaan: 14.
+- Return: `{ date, period, data: { byCode, bySector } }` — `byCode`: array semua item (per code); `bySector`: key sector → array item.
+- Deskripsi: Satu nilai RSI terakhir per saham (seluruh universe). Tanpa pagination/sort; sort/filter di frontend. `rsi` null jika data close tidak cukup.
+
+**Contoh:**
+
+```bash
+curl -s 'http://127.0.0.1:50270/api/screener/rsi'
+curl -s 'http://127.0.0.1:50270/api/screener/rsi?date=20260311&period=14'
+```
+
+---
+
 ### Sector Strength
 
 ```http
@@ -120,29 +253,6 @@ GET /api/sector/strength
 
 ```bash
 curl -s 'http://127.0.0.1:50270/api/sector/strength?week=26'
-```
-
----
-
-### OHLC
-
-```http
-GET /api/:code/ohlc
-```
-
-- Parameter path:
-  - `code` `<string>`: Kode saham (contoh: BBCA, GOTO).
-- Parameter query:
-  - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
-  - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
-- Return: `Array<{ date, open, high, low, close, volume, change }>`
-- Deskripsi: Data OHLC + volume + change untuk satu emiten dalam rentang tanggal.
-- Error: `400` jika code kosong atau start/end tidak valid.
-
-**Contoh:**
-
-```bash
-curl -s 'http://127.0.0.1:50270/api/BBCA/ohlc?start=20250101&end=20250301'
 ```
 
 ---
