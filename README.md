@@ -13,7 +13,7 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 > [!NOTE]
 > Sedang dalam pengembangan
 
-# Draft
+# Roadmap (Draft)
 
 - [ ] Analisa Teknikal
 - [ ] Export Data
@@ -21,9 +21,10 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 
 ## Fitur Utama
 
+- **Analisa teknikal** — Ringkasan RSI, volume dan bid/offer per sektor.
 - **Screener** — Filter saham pakai fundamental dan momentum, bisa eksklusi risiko.
 - **Skor komposit** — Satu skor gabungan value, quality, momentum; bobot bisa diatur.
-- **Detail saham** — Grafik OHLC plus fundamental dan rincian skor di satu modal.
+- **Detail saham** — Modal detail dengan tab fundamental & teknikal (OHLC, RSI, foreign flow).
 - **Kekuatan sektor** — Pie chart kekuatan sektor, periode 26 atau 52 minggu.
 - **API + SQLite** — Backend Deno simpan data screener dan summary di SQLite lokal.
 
@@ -36,6 +37,16 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 ```bash
 git clone https://github.com/NeaByteLab/IDX-UI.git
 cd IDX-UI
+```
+
+**Update dari repo (reset ke versi origin)**
+
+> [!WARNING]
+> Ini akan membuang semua perubahan lokal yang belum kamu commit.
+
+```bash
+git fetch origin
+git reset --hard origin/main
 ```
 
 **2. Setup database**
