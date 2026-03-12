@@ -10,12 +10,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import * as Hooks from '@app/pages/hooks/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
-const defaultPageSize = 10
-
 function buildQueryParams(
   params: Types.CandidatesParams
 ): Record<string, string | number | boolean> {
-  const limit = params.limit != null ? params.limit : defaultPageSize
+  const limit = params.limit != null ? params.limit : 10
   const queryParams: Record<string, string | number | boolean> = { limit }
   if (params.offset != null) {
     queryParams['offset'] = params.offset
@@ -70,7 +68,6 @@ export function useCandidates(params: Types.CandidatesParams) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const requestIdRef = useRef(0)
-
   const fetchCandidates = useCallback(
     (signal?: AbortSignal) => {
       const myId = requestIdRef.current + 1

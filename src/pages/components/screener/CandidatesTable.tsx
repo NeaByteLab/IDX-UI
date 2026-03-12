@@ -48,7 +48,7 @@ export default function CandidatesTable({
             <tr>
               <th className='idx-table-col-kode'>Kode</th>
               <th className='idx-table-col-nama'>Nama Emiten</th>
-              <th className='idx-table-col-sektor'>Sektor</th>
+              <th className='idx-table-col-sector'>Sektor</th>
               <th className='idx-table-th-right'>PER</th>
               <th className='idx-table-th-right'>ROE</th>
               <th className='idx-table-th-right'>DER</th>
@@ -67,7 +67,7 @@ export default function CandidatesTable({
                   <span className='idx-table-code-bold'>{candidateRow.code}</span>
                 </td>
                 <td className='idx-table-col-nama'>{candidateRow.name ?? '-'}</td>
-                <td className='idx-table-col-sektor'>{candidateRow.sector ?? '-'}</td>
+                <td className='idx-table-col-sector'>{candidateRow.sector ?? '-'}</td>
                 <td className='idx-table-td-right'>
                   {Utils.Format.formatNum(candidateRow.per, 1)}
                 </td>

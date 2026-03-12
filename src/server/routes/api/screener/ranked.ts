@@ -57,10 +57,7 @@ export async function GET(ctx: Context) {
     week52PC: row.week52PC
   }))
   const rankedRows = Services.Composite.computeRanked(rowsForScore, compositeWeights)
-  const codeToFlags = new Map<
-    string,
-    { notation: string | null; corpAction: string | null; umaDate: string | null }
-  >()
+  const codeToFlags = new Map<string, Types.CodeFlags>()
   for (const row of screenerRows) {
     codeToFlags.set(row.code, {
       notation: row.notation,

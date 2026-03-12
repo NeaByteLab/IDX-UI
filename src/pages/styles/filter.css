@@ -22,12 +22,6 @@
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.idx-btn:hover {
-  background: #f9fafb;
-  border-color: var(--idx-primary-soft);
-  color: var(--idx-primary);
-}
-
 .idx-btn-primary {
   display: inline-flex;
   align-items: center;
@@ -50,6 +44,12 @@
   color: var(--idx-white);
   border: none;
   box-shadow: 0 6px 20px -4px rgba(204, 62, 62, 0.4);
+}
+
+.idx-btn:hover {
+  background: #f9fafb;
+  border-color: var(--idx-primary-soft);
+  color: var(--idx-primary);
 }
 
 .idx-checkbox-group {

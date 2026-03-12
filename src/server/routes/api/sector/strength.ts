@@ -37,7 +37,7 @@ export async function GET(ctx: Context) {
       .from(Schemas.summary)
       .where(and(gte(Schemas.summary.date, startDate), lte(Schemas.summary.date, Number(endDate))))
       .orderBy(asc(Schemas.summary.stockCode), asc(Schemas.summary.date))
-    const codeToRows = new Map<string, { date: number; close: number | null }[]>()
+    const codeToRows = new Map<string, Types.DateCloseNullableRow[]>()
     for (const row of summaryRows) {
       Utils.pushToMapList(codeToRows, row.stockCode, {
         date: Number(row.date),

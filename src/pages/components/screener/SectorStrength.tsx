@@ -12,7 +12,7 @@ import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recha
 import * as Utils from '@app/pages/utils/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
-const sectorPalette = [
+export const sectorPalette = [
   '#6b9bc4',
   '#8b7aa8',
   '#a87a8b',
@@ -122,7 +122,11 @@ export default function SectorStrength({
                     const sector = payload?.sector ?? ''
                     const avgMomentum = payload?.avgMomentum ?? 0
                     return [
-                      `${sector}: ${Utils.Format.formatPct(avgMomentum)} (${count} emiten)`,
+                      `${Utils.Format.formatTitleCase(sector)}: ${
+                        Utils.Format.formatPct(
+                          avgMomentum
+                        )
+                      } (${count} ${Utils.Format.formatTitleCase('emiten')})`,
                       ''
                     ]
                   }}

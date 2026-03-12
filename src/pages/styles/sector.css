@@ -6,8 +6,21 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
+.idx-rsi-chart-wrap {
+  min-width: 0;
+  width: 100%;
+  min-height: 320px;
+  overflow: visible;
+}
+
 .idx-sector-card {
   padding: var(--idx-space-24);
+}
+
+.idx-sector-chart-wrap {
+  min-width: 0;
+  width: 100%;
+  margin-bottom: var(--idx-space-16);
 }
 
 .idx-sector-header {
@@ -17,10 +30,17 @@
   margin-bottom: var(--idx-space-16);
 }
 
-.idx-sector-chart-wrap {
-  min-width: 0;
-  width: 100%;
-  margin-bottom: var(--idx-space-16);
+.idx-technical-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--idx-space-24);
+  margin-top: var(--idx-space-24);
+}
+
+@media (max-width: 900px) {
+  .idx-technical-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 .idx-sector-item {

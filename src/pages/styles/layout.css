@@ -98,16 +98,20 @@
   transition: color 0.2s, background 0.2s;
 }
 
-.idx-nav-item:hover {
-  color: var(--idx-deep);
-}
-
 .idx-nav-item.idx-nav-item-active {
   background: var(--idx-primary);
   color: var(--idx-white);
 }
 
+.idx-nav-item:not(.idx-nav-item-active):hover {
+  color: var(--idx-deep);
+}
+
 @media (max-width: 768px) {
+  .idx-nav-item {
+    padding: var(--idx-space-10) 14px;
+  }
+
   .idx-nav-item-text {
     position: absolute;
     width: 1px;
@@ -118,10 +122,6 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .idx-nav-item {
-    padding: var(--idx-space-10) 14px;
   }
 }
 

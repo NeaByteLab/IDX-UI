@@ -10,6 +10,7 @@ import type { Context } from '@neabyte/deserve'
 import Database from '@app/server/Database.ts'
 import Utils from '@app/server/Utils.ts'
 import * as Schemas from '@app/server/schemas/index.ts'
+import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
   const screenerRows = await Database.select({
@@ -28,11 +29,12 @@ export async function GET(ctx: Context) {
   const sectors = Utils.uniqueSorted(screenerRows.map((row) => row.sector))
   const subSectors = Utils.uniqueSorted(screenerRows.map((row) => row.subSector))
   const subIndustries = Utils.uniqueSorted(screenerRows.map((row) => row.subIndustry))
-  return ctx.send.json({
+  const response: Types.GeneralApiResponse = {
     stockList,
     industries,
     sectors,
     subSectors,
     subIndustries
-  })
+  }
+  return ctx.send.json(response)
 }

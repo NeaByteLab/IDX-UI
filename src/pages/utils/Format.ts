@@ -35,6 +35,13 @@ export default class Format {
     })
   }
 
+  static formatTitleCase(s: string): string {
+    if (!s || typeof s !== 'string') {
+      return s
+    }
+    return s.replace(/\b\w/g, (c) => c.toUpperCase())
+  }
+
   static formatRp(numericValue: number | null | undefined): string {
     if (numericValue == null || !Number.isFinite(numericValue)) {
       return '-'
@@ -49,6 +56,11 @@ export default class Format {
       return `${(numericValue / 1e6).toFixed(2)}M`
     }
     return numericValue.toLocaleString('id-ID')
+  }
+
+  static getTodayDateInt(): number {
+    const now = new Date()
+    return now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate()
   }
 
   static addDaysToDateInt(dateInt: number, deltaDays: number): number {

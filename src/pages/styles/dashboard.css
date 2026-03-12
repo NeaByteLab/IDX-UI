@@ -89,6 +89,15 @@
   box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.03);
 }
 
+.idx-main .idx-tab.idx-tab-inline:not(.idx-tab-active) {
+  border: 1px solid var(--idx-text-muted);
+}
+
+.idx-main .idx-tabs {
+  background: none;
+  padding: 0;
+}
+
 .idx-stat-card {
   padding: var(--idx-space-24);
   border-radius: var(--idx-radius-lg);

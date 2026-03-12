@@ -25,7 +25,7 @@ export default function DashboardHeader({
           <span>Screener Saham</span>
         </h1>
         <p className='idx-dashboard-subtitle'>
-          Kandidat Saham Berdasarkan Skor Gabungan: <strong>Valuasi, Kualitas, dan Momentum</strong>
+          Filter Berdasarkan Skor Gabungan: <strong>Valuasi, Kualitas, dan Momentum</strong>
         </p>
       </div>
       <div className='idx-header-stats'>

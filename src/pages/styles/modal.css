@@ -6,8 +6,10 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
-.idx-detail-sections {
-  margin-bottom: var(--idx-space-24);
+.idx-chart-container {
+  height: 180px;
+  width: 100%;
+  margin-top: var(--idx-space-12);
 }
 
 .idx-detail-block {
@@ -16,12 +18,6 @@
 
 .idx-detail-composite-cell {
   font-weight: 800;
-}
-
-.idx-chart-container {
-  height: 180px;
-  width: 100%;
-  margin-top: var(--idx-space-12);
 }
 
 .idx-detail-grid {
@@ -97,6 +93,10 @@
 }
 
 .idx-detail-sections {
+  margin-bottom: var(--idx-space-24);
+}
+
+.idx-detail-sections {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px 24px;
@@ -140,6 +140,36 @@
   }
 }
 
+.idx-foreign-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--idx-space-12);
+}
+
+.idx-foreign-header .idx-tabs {
+  margin-bottom: 0;
+}
+
+.idx-foreign-tooltip {
+  background: var(--idx-deep);
+  color: var(--idx-white);
+  padding: var(--idx-space-8) var(--idx-space-12);
+  border-radius: var(--idx-radius-md);
+  font-size: var(--idx-text-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.idx-foreign-tooltip > div + div {
+  margin-top: var(--idx-space-2);
+}
+
+.idx-foreign-tooltip-label {
+  font-weight: 800;
+  margin-bottom: var(--idx-space-4);
+}
+
 .idx-modal {
   display: flex;
   flex-direction: column;
@@ -157,6 +187,44 @@
   min-height: 0;
   overflow-y: auto;
   padding: var(--idx-space-20);
+}
+
+.idx-modal-body .idx-tab.idx-tab-inline:not(.idx-tab-active) {
+  border: 1px solid var(--idx-text-muted);
+}
+
+.idx-modal-body .idx-tabs {
+  background: none;
+  padding: 0;
+}
+
+.idx-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--idx-space-6);
+}
+
+.idx-tooltip-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.idx-tooltip-swatch-down {
+  background: var(--idx-down);
+}
+
+.idx-tooltip-swatch-emiten {
+  background: var(--idx-primary);
+}
+
+.idx-tooltip-swatch-sector {
+  background: var(--idx-text-secondary);
+}
+
+.idx-tooltip-swatch-up {
+  background: var(--idx-up);
 }
 
 .idx-modal-close {

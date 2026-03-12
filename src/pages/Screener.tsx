@@ -7,12 +7,12 @@
  */
 
 import React, { useCallback, useState } from 'react'
+import { BarChart2, TrendingUp } from 'lucide-react'
 import * as ScreenerComps from '@app/pages/components/screener/index.ts'
 import * as Hooks from '@app/pages/hooks/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 import * as Utils from '@app/pages/utils/index.ts'
 
-/** Default filter ala finance: valuasi wajar, profitabilitas, leverage, momentum, likuiditas. */
 const defaultParams: Types.CandidatesParams = {
   limit: 10,
   offset: 0,
@@ -38,10 +38,21 @@ export default function Screener() {
   const [sectorFilter, setSectorFilter] = useState<string>('')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [detailCode, setDetailCode] = useState<string | null>(null)
-
+  const [mainTab, setMainTab] = useState<Types.MainAnalysisTab>('fundamental')
   const { data: generalData } = Hooks.useGeneral()
+  const {
+    data: screenerRsiData,
+    loading: screenerRsiLoading,
+    error: screenerRsiError,
+    refetch: refetchScreenerRsi
+  } = Hooks.useScreenerRsi()
+  const {
+    data: screenerBidOfferData,
+    loading: screenerBidOfferLoading,
+    error: screenerBidOfferError,
+    refetch: refetchScreenerBidOffer
+  } = Hooks.useScreenerBidOffer()
   const sectors = generalData?.sectors ?? []
-
   const {
     response: candidatesResponse,
     loading: candidatesLoading,
@@ -123,59 +134,97 @@ export default function Screener() {
           onRefresh={refetchCandidates}
           loading={candidatesLoading}
         />
-        <div className='idx-grid-main'>
-          <div>
-            <ScreenerComps.FilterPanel
-              params={params}
-              sectors={sectors}
-              sectorFilter={sectorFilter}
-              onSectorFilterChange={setSectorFilter}
-              onParamsChange={handleParamsChange}
-              onApply={handleApplyFilter}
-              onDefaultFilter={handleDefaultFilter}
-            />
-            {!candidatesLoading && candidatesError && (
-              <div className='idx-error idx-mt-16'>{candidatesError}</div>
-            )}
-            {candidatesLoading && filteredCandidates.length === 0 && (
-              <div className='idx-loading idx-mt-16'>Memuat kandidat...</div>
-            )}
-            {!candidatesLoading && !candidatesError && (
-              <div className='idx-mt-24'>
-                {rawData.length > 0
-                  ? (
-                    <ScreenerComps.CandidatesTable
-                      data={filteredCandidates}
-                      limit={limit}
-                      offset={offset}
-                      totalCount={displayTotalCount}
-                      {...(sectorFilter !== '' && { totalCountLabel: `filter: ${sectorFilter}` })}
-                      onPage={handlePageChange}
-                      onRowClick={handleRowClick}
-                      searchValue={searchQuery}
-                      onSearchChange={setSearchQuery}
-                    />
-                  )
-                  : (
-                    <div className='idx-card idx-card-center'>
-                      <p className='idx-p-muted'>
-                        Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik
-                        &quot;Reset Ke Default&quot;.
-                      </p>
-                    </div>
-                  )}
-              </div>
-            )}
-          </div>
-          <aside>
-            <ScreenerComps.SectorStrength
-              data={sectorData}
-              loading={sectorLoading}
-              week={sectorWeek}
-              onWeekChange={setSectorWeek}
-            />
-          </aside>
+        <div className='idx-tabs idx-mb-24'>
+          <button
+            type='button'
+            className={`idx-tab idx-tab-inline ${
+              mainTab === 'fundamental' ? 'idx-tab-active' : ''
+            }`}
+            onClick={() => setMainTab('fundamental')}
+          >
+            <BarChart2 size={16} aria-hidden />
+            <span>Analisa Fundamental</span>
+          </button>
+          <button
+            type='button'
+            className={`idx-tab idx-tab-inline ${mainTab === 'technical' ? 'idx-tab-active' : ''}`}
+            onClick={() => setMainTab('technical')}
+          >
+            <TrendingUp size={16} aria-hidden />
+            <span>Analisa Teknikal</span>
+          </button>
         </div>
+        {mainTab === 'fundamental' && (
+          <div className='idx-grid-main'>
+            <div>
+              <ScreenerComps.FilterPanel
+                params={params}
+                sectors={sectors}
+                sectorFilter={sectorFilter}
+                onSectorFilterChange={setSectorFilter}
+                onParamsChange={handleParamsChange}
+                onApply={handleApplyFilter}
+                onDefaultFilter={handleDefaultFilter}
+              />
+              {!candidatesLoading && candidatesError && (
+                <div className='idx-error idx-mt-16'>{candidatesError}</div>
+              )}
+              {candidatesLoading && filteredCandidates.length === 0 && (
+                <div className='idx-loading idx-mt-16'>Memuat kandidat...</div>
+              )}
+              {!candidatesLoading && !candidatesError && (
+                <div className='idx-mt-24'>
+                  {rawData.length > 0
+                    ? (
+                      <ScreenerComps.CandidatesTable
+                        data={filteredCandidates}
+                        limit={limit}
+                        offset={offset}
+                        totalCount={displayTotalCount}
+                        {...(sectorFilter !== '' && { totalCountLabel: `filter: ${sectorFilter}` })}
+                        onPage={handlePageChange}
+                        onRowClick={handleRowClick}
+                        searchValue={searchQuery}
+                        onSearchChange={setSearchQuery}
+                      />
+                    )
+                    : (
+                      <div className='idx-card idx-card-center'>
+                        <p className='idx-p-muted'>
+                          Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik
+                          &quot;Reset Ke Default&quot;.
+                        </p>
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+            <aside>
+              <ScreenerComps.SectorStrength
+                data={sectorData}
+                loading={sectorLoading}
+                week={sectorWeek}
+                onWeekChange={setSectorWeek}
+              />
+            </aside>
+          </div>
+        )}
+        {mainTab === 'technical' && (
+          <div className='idx-technical-row'>
+            <ScreenerComps.RsiMarketView
+              data={screenerRsiData}
+              loading={screenerRsiLoading}
+              error={screenerRsiError}
+              onRefetch={refetchScreenerRsi}
+            />
+            <ScreenerComps.BidOfferMarketView
+              data={screenerBidOfferData}
+              loading={screenerBidOfferLoading}
+              error={screenerBidOfferError}
+              onRefetch={refetchScreenerBidOffer}
+            />
+          </div>
+        )}
       </div>
       {detailCode && (
         <ScreenerComps.StockDetailModal

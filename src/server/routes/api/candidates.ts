@@ -111,7 +111,7 @@ export async function GET(ctx: Context) {
         .where(eq(Schemas.summary.date, summaryDate))
     }
   }
-  const codeToLiquidity = new Map<string, { value: number | null; volume: number | null }>()
+  const codeToLiquidity = new Map<string, Types.LiquiditySnapshot>()
   const codeToChangePct = new Map<string, number | null>()
   for (const row of summaryRows) {
     codeToLiquidity.set(row.stockCode, {
@@ -160,10 +160,7 @@ export async function GET(ctx: Context) {
     week52PC: row.week52PC
   }))
   const rankedRows = Services.Composite.computeRanked(rowsForScore, compositeWeights)
-  const codeToFlags = new Map<
-    string,
-    { notation: string | null; corpAction: string | null; umaDate: string | null }
-  >()
+  const codeToFlags = new Map<string, Types.CodeFlags>()
   for (const row of filteredScreenerRows) {
     codeToFlags.set(row.code, {
       notation: row.notation,

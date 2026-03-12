@@ -12,14 +12,14 @@ import * as HomeTabs from '@app/pages/components/home/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
 const tabs: { id: Types.HomeTab; label: string; icon: React.ReactNode }[] = [
-  { id: 'metodologi', label: 'Metodologi', icon: <BookOpen size={16} aria-hidden /> },
-  { id: 'skor', label: 'Cara Skor Dihitung', icon: <Calculator size={16} aria-hidden /> },
+  { id: 'methodology', label: 'Metodologi', icon: <BookOpen size={16} aria-hidden /> },
+  { id: 'score', label: 'Cara Skor Dihitung', icon: <Calculator size={16} aria-hidden /> },
   { id: 'filter', label: 'Filter & Risiko', icon: <Shield size={16} aria-hidden /> },
-  { id: 'cara', label: 'Cara Pakai', icon: <Compass size={16} aria-hidden /> }
+  { id: 'howTo', label: 'Cara Pakai', icon: <Compass size={16} aria-hidden /> }
 ]
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<Types.HomeTab>('metodologi')
+  const [activeTab, setActiveTab] = useState<Types.HomeTab>('methodology')
 
   return (
     <div className='idx-main'>
@@ -54,7 +54,6 @@ export default function Home() {
           </p>
         </div>
       </section>
-
       <section className='idx-card idx-home-tabs-card'>
         <div className='idx-tabs idx-tabs-in-card'>
           {tabs.map((tabItem) => (
@@ -71,10 +70,10 @@ export default function Home() {
             </button>
           ))}
         </div>
-        {activeTab === 'metodologi' && <HomeTabs.TabMethodology />}
-        {activeTab === 'skor' && <HomeTabs.TabScore />}
+        {activeTab === 'methodology' && <HomeTabs.TabMethodology />}
+        {activeTab === 'score' && <HomeTabs.TabScore />}
         {activeTab === 'filter' && <HomeTabs.TabFilter />}
-        {activeTab === 'cara' && <HomeTabs.TabHowTo />}
+        {activeTab === 'howTo' && <HomeTabs.TabHowTo />}
       </section>
     </div>
   )

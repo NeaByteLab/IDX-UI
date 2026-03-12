@@ -28,12 +28,6 @@ export async function GET(ctx: Context) {
   }
   const summaryRows = await Database.select({
     date: Schemas.summary.date,
-    open: Schemas.summary.priceOpen,
-    high: Schemas.summary.priceHigh,
-    low: Schemas.summary.priceLow,
-    close: Schemas.summary.priceClose,
-    volume: Schemas.summary.volume,
-    change: Schemas.summary.change,
     bidVolume: Schemas.summary.bidVolume,
     offerVolume: Schemas.summary.offerVolume
   })
@@ -46,16 +40,10 @@ export async function GET(ctx: Context) {
       )
     )
     .orderBy(asc(Schemas.summary.date))
-  const ohlcRows: Types.OhlcRowApi[] = summaryRows.map((row) => ({
+  const rows: Types.BidOfferRowApi[] = summaryRows.map((row) => ({
     date: row.date,
-    open: row.open,
-    high: row.high,
-    low: row.low,
-    close: row.close,
-    volume: row.volume,
-    change: row.change,
     bidVolume: row.bidVolume,
     offerVolume: row.offerVolume
   }))
-  return ctx.send.json(ohlcRows)
+  return ctx.send.json(rows)
 }

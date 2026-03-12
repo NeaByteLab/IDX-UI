@@ -26,36 +26,56 @@ export async function GET(ctx: Context) {
   if (end < start) {
     return ctx.send.json({ error: 'end must be >= start' }, { status: 400 })
   }
+  const stockCode = code.trim().toUpperCase()
   const summaryRows = await Database.select({
     date: Schemas.summary.date,
-    open: Schemas.summary.priceOpen,
-    high: Schemas.summary.priceHigh,
-    low: Schemas.summary.priceLow,
-    close: Schemas.summary.priceClose,
-    volume: Schemas.summary.volume,
-    change: Schemas.summary.change,
-    bidVolume: Schemas.summary.bidVolume,
-    offerVolume: Schemas.summary.offerVolume
+    foreignBuy: Schemas.summary.foreignBuy,
+    foreignSell: Schemas.summary.foreignSell
   })
     .from(Schemas.summary)
     .where(
       and(
-        eq(Schemas.summary.stockCode, code.trim().toUpperCase()),
+        eq(Schemas.summary.stockCode, stockCode),
         gte(Schemas.summary.date, start),
         lte(Schemas.summary.date, end)
       )
     )
     .orderBy(asc(Schemas.summary.date))
-  const ohlcRows: Types.OhlcRowApi[] = summaryRows.map((row) => ({
-    date: row.date,
-    open: row.open,
-    high: row.high,
-    low: row.low,
-    close: row.close,
-    volume: row.volume,
-    change: row.change,
-    bidVolume: row.bidVolume,
-    offerVolume: row.offerVolume
-  }))
-  return ctx.send.json(ohlcRows)
+  const numOrZero = (v: number | null | undefined): number =>
+    v != null && Number.isFinite(v) ? Number(v) : 0
+  const data: Types.ForeignFlowRow[] = summaryRows.map((row) => {
+    const buy = row.foreignBuy != null && Number.isFinite(Number(row.foreignBuy))
+      ? Number(row.foreignBuy)
+      : null
+    const sell = row.foreignSell != null && Number.isFinite(Number(row.foreignSell))
+      ? Number(row.foreignSell)
+      : null
+    const net = buy != null && sell != null ? buy - sell : null
+    return {
+      date: Number(row.date),
+      buy,
+      sell,
+      net
+    }
+  })
+  let totalBuy = 0
+  let totalSell = 0
+  for (const row of data) {
+    totalBuy += numOrZero(row.buy)
+    totalSell += numOrZero(row.sell)
+  }
+  const summary: Types.ForeignSummary = {
+    totalBuy,
+    totalSell,
+    totalNet: totalBuy - totalSell,
+    dayCount: data.length
+  }
+  const response: Types.ForeignApiResponse = {
+    code: stockCode,
+    start,
+    end,
+    data,
+    summary
+  }
+  return ctx.send.json(response)
 }

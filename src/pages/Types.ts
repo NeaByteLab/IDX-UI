@@ -55,6 +55,68 @@ export interface CandidatesResponse {
   data: CandidateRow[] | CandidateRowWithSectorRank[]
 }
 
+export type ForeignPeriodDays = 30 | 60 | 90 | 180 | 360
+
+export interface ScreenerRsiItem {
+  code: string
+  name: string | null
+  sector: string | null
+  rsi: number | null
+}
+
+export interface ScreenerRsiResponse {
+  date: number
+  period: number
+  data: { byCode: ScreenerRsiItem[]; bySector: Record<string, ScreenerRsiItem[]> }
+}
+
+export interface ScreenerBidOfferItem {
+  sector: string
+  bidVolume: number
+  offerVolume: number
+  count: number
+}
+
+export interface ScreenerBidOfferResponse {
+  date: number
+  data: ScreenerBidOfferItem[]
+}
+
+export interface RsiRow {
+  date: number
+  rsi: number | null
+}
+
+export interface RsiResponse {
+  code: string
+  start: number
+  end: number
+  period: number
+  data: RsiRow[]
+  sector: string | null
+  sectorData: RsiRow[]
+}
+
+export interface ForeignFlowRow {
+  date: number
+  buy: number | null
+  sell: number | null
+  net: number | null
+}
+
+export interface ForeignResponse {
+  code: string
+  start: number
+  end: number
+  data: ForeignFlowRow[]
+  summary: {
+    totalBuy: number
+    totalSell: number
+    totalNet: number
+    dayCount: number
+  }
+}
+
 export interface SectorStrengthRow {
   sector: string
   avgMomentum: number
@@ -70,6 +132,11 @@ export interface StockDetailOhlcRow {
   close: number | null
   volume: number | null
   change: number | null
+}
+
+export interface OhlcApiRow extends StockDetailOhlcRow {
+  bidVolume: number | null
+  offerVolume: number | null
 }
 
 export interface StockDetail {
@@ -121,7 +188,11 @@ export interface CandidatesParams {
   withSectorRank?: boolean
 }
 
-export type HomeTab = 'metodologi' | 'skor' | 'filter' | 'cara'
+export type MainAnalysisTab = 'fundamental' | 'technical'
+
+export type DetailTab = 'fundamental' | 'technical'
+
+export type HomeTab = 'methodology' | 'score' | 'filter' | 'howTo'
 
 export type CandidateTableRow = CandidateRow | CandidateRowWithSectorRank
 
