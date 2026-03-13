@@ -38,15 +38,8 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 - **Kekuatan sektor** — Pie chart kekuatan sektor, periode 26 atau 52 minggu.
 - **Detail saham** — Modal tab fundamental dan teknikal: OHLC, RSI, foreign flow.
 - **Historical bid/offer** — Agregat bid/offer per sektor, rasio dan rata-rata, periode 1W–12M.
+- **Watchlist** — Simpan saham favorit pakai bintang, untuk akses data yang lebih cepat.
 - **API + SQLite** — Backend Deno, data di SQLite, cron tiap jam fetch data IDX.
-
-> [!NOTE]
-> Sedang dalam pengembangan
-
-## Roadmap (Draft)
-
-- [ ] Export Data
-- [ ] Watchlist
 
 ## Instalasi
 
