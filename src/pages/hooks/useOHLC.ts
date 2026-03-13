@@ -24,7 +24,7 @@ export function useOHLC(stockCode: string | null, periodDays: Types.ForeignPerio
     setError(null)
     const end = Utils.Format.getTodayDateInt()
     const start = Utils.Format.addDaysToDateInt(end, -periodDays)
-    Hooks.useClient<Types.OhlcApiRow[]>(`/api/${stockCode.trim().toUpperCase()}/ohlc`, {
+    Hooks.fetchApi<Types.OhlcApiRow[]>(`/api/${stockCode.trim().toUpperCase()}/ohlc`, {
       start,
       end
     })

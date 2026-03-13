@@ -8,7 +8,7 @@
 
 import type * as Types from '@app/pages/Types.ts'
 
-export async function useClient<T>(
+export async function fetchApi<T>(
   path: string,
   params?: Record<string, string | number | boolean | undefined>,
   options?: Types.ClientOptions

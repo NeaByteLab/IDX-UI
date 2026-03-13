@@ -60,6 +60,12 @@ function buildQueryParams(
   if (params.withSectorRank === true) {
     queryParams['withSectorRank'] = true
   }
+  if (params.sector != null && params.sector !== '') {
+    queryParams['sector'] = params.sector
+  }
+  if (params.search != null && params.search.trim() !== '') {
+    queryParams['search'] = params.search.trim()
+  }
   return queryParams
 }
 
@@ -76,7 +82,7 @@ export function useCandidates(params: Types.CandidatesParams) {
       setError(null)
       const queryParams = buildQueryParams(params)
       const opts = signal ? { signal } : undefined
-      Hooks.useClient<Types.CandidatesResponse>('/api/candidates', queryParams, opts)
+      Hooks.fetchApi<Types.CandidatesResponse>('/api/candidates', queryParams, opts)
         .then((data) => {
           if (requestIdRef.current === myId) {
             setResponse(data)
@@ -117,7 +123,9 @@ export function useCandidates(params: Types.CandidatesParams) {
       params.derMax,
       params.momentumWeek,
       params.momentumMin,
-      params.withSectorRank
+      params.withSectorRank,
+      params.sector,
+      params.search
     ]
   )
 

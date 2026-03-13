@@ -235,6 +235,23 @@ export async function GET(ctx: Context) {
   if (minVolume != null) {
     filteredCandidates = filteredCandidates.filter((row) => (row.volume ?? 0) >= minVolume)
   }
+  const sectorParam = Utils.queryString(ctx.query('sector'))?.trim()
+  if (sectorParam !== undefined && sectorParam !== '') {
+    filteredCandidates = filteredCandidates.filter(
+      (row) => row.sector != null && row.sector.trim() === sectorParam
+    )
+  }
+  const searchParam = Utils.queryString(ctx.query('search'))?.trim().toLowerCase()
+  if (searchParam !== undefined && searchParam !== '') {
+    filteredCandidates = filteredCandidates.filter((row) => {
+      const code = row.code?.toLowerCase() ?? ''
+      const name = row.name?.toLowerCase() ?? ''
+      const sector = row.sector?.toLowerCase() ?? ''
+      return (
+        code.includes(searchParam) || name.includes(searchParam) || sector.includes(searchParam)
+      )
+    })
+  }
   const totalCount = filteredCandidates.length
   const withPercentile = filteredCandidates.map((row, index) => ({
     ...row,

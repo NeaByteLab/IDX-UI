@@ -6,12 +6,12 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BarChart2, TrendingUp } from 'lucide-react'
 import * as ScreenerComps from '@app/pages/components/screener/index.ts'
 import * as Hooks from '@app/pages/hooks/index.ts'
-import type * as Types from '@app/pages/Types.ts'
 import * as Utils from '@app/pages/utils/index.ts'
+import type * as Types from '@app/pages/Types.ts'
 
 const defaultParams: Types.CandidatesParams = {
   limit: 10,
@@ -37,8 +37,11 @@ export default function Screener() {
   const [sectorWeek, setSectorWeek] = useState<26 | 52>(26)
   const [sectorFilter, setSectorFilter] = useState<string>('')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [searchForRequest, setSearchForRequest] = useState<string>('')
   const [detailCode, setDetailCode] = useState<string | null>(null)
   const [mainTab, setMainTab] = useState<Types.MainAnalysisTab>('fundamental')
+  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const lastSearchForRequestRef = useRef<string>('')
   const { data: generalData } = Hooks.useGeneral()
   const {
     data: screenerRsiData,
@@ -53,12 +56,41 @@ export default function Screener() {
     refetch: refetchScreenerBidOffer
   } = Hooks.useScreenerBidOffer()
   const sectors = generalData?.sectors ?? []
+  useEffect(() => {
+    const trimmed = searchQuery.trim()
+    if (searchDebounceRef.current != null) {
+      clearTimeout(searchDebounceRef.current)
+    }
+    searchDebounceRef.current = setTimeout(() => {
+      searchDebounceRef.current = null
+      setSearchForRequest(trimmed)
+      if (trimmed !== lastSearchForRequestRef.current) {
+        lastSearchForRequestRef.current = trimmed
+        setAppliedParams((prev) => ({ ...prev, offset: 0 }))
+        setParams((prev) => ({ ...prev, offset: 0 }))
+      }
+    }, 300)
+    return () => {
+      if (searchDebounceRef.current != null) {
+        clearTimeout(searchDebounceRef.current)
+      }
+    }
+  }, [searchQuery])
+
+  const requestParams = useMemo(() => {
+    const { sector: _s, search: _q, ...rest } = appliedParams
+    return {
+      ...rest,
+      ...(sectorFilter.trim() !== '' && { sector: sectorFilter }),
+      ...(searchForRequest !== '' && { search: searchForRequest })
+    }
+  }, [appliedParams, sectorFilter, searchForRequest])
   const {
     response: candidatesResponse,
     loading: candidatesLoading,
     error: candidatesError,
     refetch: refetchCandidates
-  } = Hooks.useCandidates(appliedParams)
+  } = Hooks.useCandidates(requestParams)
   const { data: sectorData, loading: sectorLoading } = Hooks.useSectorStrength(sectorWeek)
   const {
     data: detailData,
@@ -73,13 +105,24 @@ export default function Screener() {
   }, [])
 
   const handleApplyFilter = useCallback(() => {
-    setAppliedParams({ ...params, offset: 0 })
-  }, [params])
+    const trimmed = searchQuery.trim()
+    setSearchForRequest(trimmed)
+    const { sector: _s, search: _q, ...rest } = params
+    setAppliedParams({
+      ...rest,
+      offset: 0,
+      ...(sectorFilter.trim() !== '' && { sector: sectorFilter }),
+      ...(trimmed !== '' && { search: trimmed })
+    })
+  }, [params, sectorFilter, searchQuery])
 
   const handleDefaultFilter = useCallback(() => {
     const paramsToApply = { ...defaultParams, offset: 0 }
     setParams(paramsToApply)
     setAppliedParams(paramsToApply)
+    setSectorFilter('')
+    setSearchQuery('')
+    setSearchForRequest('')
   }, [])
 
   const handlePageChange = useCallback((newOffset: number) => {
@@ -104,26 +147,26 @@ export default function Screener() {
     clearDetail()
   }, [clearDetail])
 
+  const handleSectorFilterChange = useCallback((sector: string) => {
+    setSectorFilter(sector)
+    setAppliedParams((prev) => ({ ...prev, offset: 0 }))
+    setParams((prev) => ({ ...prev, offset: 0 }))
+  }, [])
+
+  const handleSearchChange = useCallback((query: string) => {
+    setSearchQuery(query)
+  }, [])
+
   const dataDate = candidatesResponse?.date ?? 0
   const rawData = candidatesResponse?.data ?? []
-  const sectorDataFiltered = sectorFilter === ''
-    ? rawData
-    : rawData.filter((candidateRow: Types.CandidateRow) => candidateRow.sector === sectorFilter)
-  const searchTerm = searchQuery.trim().toLowerCase()
-  const filteredCandidates = searchTerm === '' ? sectorDataFiltered : sectorDataFiltered.filter(
-    (candidateRow: Types.CandidateRow) =>
-      (candidateRow.code && candidateRow.code.toLowerCase().includes(searchTerm)) ||
-      (candidateRow.name && candidateRow.name?.toLowerCase().includes(searchTerm)) ||
-      (candidateRow.sector && candidateRow.sector.toLowerCase().includes(searchTerm))
-  )
   const totalCount = candidatesResponse?.totalCount ?? 0
   const limit = candidatesResponse?.limit ?? 10
   const offset = candidatesResponse?.offset ?? 0
-  const displayTotalCount = searchTerm
-    ? filteredCandidates.length
-    : sectorFilter === ''
-    ? totalCount
-    : sectorDataFiltered.length
+  const totalCountLabel = sectorFilter.trim() !== ''
+    ? `sektor: ${sectorFilter}`
+    : searchForRequest !== ''
+    ? `cari: "${searchForRequest}"`
+    : undefined
 
   return (
     <div className='idx-page'>
@@ -161,43 +204,29 @@ export default function Screener() {
                 params={params}
                 sectors={sectors}
                 sectorFilter={sectorFilter}
-                onSectorFilterChange={setSectorFilter}
+                onSectorFilterChange={handleSectorFilterChange}
                 onParamsChange={handleParamsChange}
                 onApply={handleApplyFilter}
                 onDefaultFilter={handleDefaultFilter}
               />
-              {!candidatesLoading && candidatesError && (
-                <div className='idx-error idx-mt-16'>{candidatesError}</div>
-              )}
-              {candidatesLoading && filteredCandidates.length === 0 && (
-                <div className='idx-loading idx-mt-16'>Memuat kandidat...</div>
-              )}
-              {!candidatesLoading && !candidatesError && (
-                <div className='idx-mt-24'>
-                  {rawData.length > 0
-                    ? (
-                      <ScreenerComps.CandidatesTable
-                        data={filteredCandidates}
-                        limit={limit}
-                        offset={offset}
-                        totalCount={displayTotalCount}
-                        {...(sectorFilter !== '' && { totalCountLabel: `filter: ${sectorFilter}` })}
-                        onPage={handlePageChange}
-                        onRowClick={handleRowClick}
-                        searchValue={searchQuery}
-                        onSearchChange={setSearchQuery}
-                      />
-                    )
-                    : (
-                      <div className='idx-card idx-card-center'>
-                        <p className='idx-p-muted'>
-                          Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik
-                          &quot;Reset Ke Default&quot;.
-                        </p>
-                      </div>
-                    )}
-                </div>
-              )}
+              <div className='idx-mt-24'>
+                <ScreenerComps.CandidatesTable
+                  data={rawData}
+                  limit={limit}
+                  offset={offset}
+                  totalCount={totalCount}
+                  {...(totalCountLabel != null && { totalCountLabel })}
+                  onPage={handlePageChange}
+                  onRowClick={handleRowClick}
+                  searchValue={searchQuery}
+                  onSearchChange={handleSearchChange}
+                  loading={candidatesLoading}
+                  error={candidatesError}
+                  emptyMessage={searchForRequest !== ''
+                    ? 'Tidak ada hasil untuk pencarian ini.'
+                    : 'Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik "Reset Ke Default".'}
+                />
+              </div>
             </div>
             <aside>
               <ScreenerComps.SectorStrength

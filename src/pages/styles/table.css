@@ -199,10 +199,25 @@
   background: var(--idx-primary-soft);
 }
 
+.idx-table-message-row:hover {
+  background: transparent;
+}
+
 .idx-table td {
   padding: var(--idx-space-20) var(--idx-space-24);
   font-size: var(--idx-text-base);
   border-top: 1px solid #f9fafb;
+}
+
+.idx-table-empty-cell {
+  text-align: center;
+  padding: var(--idx-space-24);
+  color: var(--idx-text-muted);
+  font-size: var(--idx-text-sm);
+}
+
+.idx-table-error-cell {
+  color: var(--idx-error, #b91c1c);
 }
 
 .idx-table-code-bold {

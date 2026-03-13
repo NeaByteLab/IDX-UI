@@ -17,12 +17,7 @@ export default function BidOfferMarketView({
   loading,
   error,
   onRefetch
-}: {
-  data: Types.ScreenerBidOfferResponse | null
-  loading: boolean
-  error: string | null
-  onRefetch: () => void
-}) {
+}: Types.BidOfferMarketViewProps) {
   const chartData = useMemo(() => {
     if (!data?.data?.length) {
       return []

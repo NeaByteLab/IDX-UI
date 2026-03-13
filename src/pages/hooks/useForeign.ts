@@ -24,7 +24,7 @@ export function useForeign(stockCode: string | null, periodDays: Types.ForeignPe
     setError(null)
     const end = Utils.Format.getTodayDateInt()
     const start = Utils.Format.addDaysToDateInt(end, -periodDays)
-    Hooks.useClient<Types.ForeignResponse>(`/api/${stockCode.trim().toUpperCase()}/foreign`, {
+    Hooks.fetchApi<Types.ForeignResponse>(`/api/${stockCode.trim().toUpperCase()}/foreign`, {
       start,
       end
     })

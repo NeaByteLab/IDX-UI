@@ -53,6 +53,8 @@ export interface CandidatesParams {
   momentumWeek?: 26 | 52
   momentumMin?: number
   withSectorRank?: boolean
+  sector?: string
+  search?: string
 }
 
 export interface CandidatesResponse {
@@ -74,6 +76,9 @@ export interface CandidatesTableProps {
   onRowClick: (code: string) => void
   searchValue?: string
   onSearchChange?: (searchQuery: string) => void
+  loading?: boolean
+  error?: string | null
+  emptyMessage?: string
 }
 
 export interface ClientOptions {
@@ -107,6 +112,11 @@ export interface ForeignFlowRow {
 }
 
 export type ForeignPeriodDays = 30 | 60 | 90 | 180 | 360
+
+export interface ForeignPeriodOption {
+  days: ForeignPeriodDays
+  label: string
+}
 
 export interface ForeignResponse {
   code: string
@@ -206,6 +216,20 @@ export interface ScreenerRsiResponse {
   data: { byCode: ScreenerRsiItem[]; bySector: Record<string, ScreenerRsiItem[]> }
 }
 
+export interface RsiMarketViewProps {
+  data: ScreenerRsiResponse | null
+  loading: boolean
+  error: string | null
+  onRefetch: () => void
+}
+
+export interface BidOfferMarketViewProps {
+  data: ScreenerBidOfferResponse | null
+  loading: boolean
+  error: string | null
+  onRefetch: () => void
+}
+
 export interface SectorStrengthProps {
   data: SectorStrengthRow[] | null
   loading: boolean
@@ -218,6 +242,11 @@ export interface SectorStrengthRow {
   avgMomentum: number
   count: number
   rank: number
+}
+
+export interface SectorStrengthTooltipPayload {
+  sector: string
+  avgMomentum: number
 }
 
 export interface StockDetail {
@@ -250,6 +279,8 @@ export interface StockDetail {
   ohlc: StockDetailOhlcRow[]
 }
 
+export type RsiChartPoint = { date: string; rsi: number; sectorRsi: number | null }
+
 export interface StockDetailModalProps {
   detail: StockDetail | null
   loading: boolean
@@ -266,3 +297,5 @@ export interface StockDetailOhlcRow {
   volume: number | null
   change: number | null
 }
+
+export type PriceLinePoint = { date: string; close: number }

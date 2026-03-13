@@ -11,6 +11,8 @@ import { ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import * as Utils from '@app/pages/utils/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
+const columnCount = 9
+
 export default function CandidatesTable({
   data,
   limit,
@@ -20,12 +22,25 @@ export default function CandidatesTable({
   onPage,
   onRowClick,
   searchValue = '',
-  onSearchChange
+  onSearchChange,
+  loading = false,
+  error = null,
+  emptyMessage
 }: Types.CandidatesTableProps) {
   const fromRow = totalCount === 0 ? 0 : offset + 1
   const toRow = Math.min(offset + data.length, offset + totalCount)
   const hasPrevPage = offset > 0
   const hasNextPage = !totalCountLabel && offset + limit < totalCount
+  const showEmptyRow = data.length === 0 && !loading && !error
+  const showLoadingRow = data.length === 0 && loading
+  const showErrorRow = error != null && error !== ''
+
+  const handleRowKeyDown = (code: string, event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      onRowClick(code)
+    }
+  }
 
   return (
     <div className='idx-card'>
@@ -58,48 +73,76 @@ export default function CandidatesTable({
             </tr>
           </thead>
           <tbody>
-            {data.map((candidateRow) => (
-              <tr
-                key={candidateRow.code}
-                onClick={() => onRowClick(candidateRow.code)}
-              >
-                <td className='idx-table-col-kode'>
-                  <span className='idx-table-code-bold'>{candidateRow.code}</span>
-                </td>
-                <td className='idx-table-col-nama'>{candidateRow.name ?? '-'}</td>
-                <td className='idx-table-col-sector'>{candidateRow.sector ?? '-'}</td>
-                <td className='idx-table-td-right'>
-                  {Utils.Format.formatNum(candidateRow.per, 1)}
-                </td>
-                <td className='idx-table-td-right'>
-                  {Utils.Format.formatNum(candidateRow.roe, 1)}
-                </td>
-                <td className='idx-table-td-right'>
-                  {Utils.Format.formatNum(candidateRow.der, 1)}
-                </td>
-                <td className='idx-table-td-right'>
-                  <span
-                    className={candidateRow.week26PC != null
-                      ? candidateRow.week26PC >= 0 ? 'idx-pct idx-pct-up' : 'idx-pct idx-pct-down'
-                      : ''}
-                  >
-                    {Utils.Format.formatPct(candidateRow.week26PC ?? null)}
-                  </span>
-                </td>
-                <td className='idx-table-td-right'>
-                  <span
-                    className={candidateRow.week52PC != null
-                      ? candidateRow.week52PC >= 0 ? 'idx-pct idx-pct-up' : 'idx-pct idx-pct-down'
-                      : ''}
-                  >
-                    {Utils.Format.formatPct(candidateRow.week52PC ?? null)}
-                  </span>
-                </td>
-                <td className='idx-table-td-right'>
-                  {Utils.Format.formatNum(candidateRow.compositePercentile, 0)}
+            {showErrorRow && (
+              <tr className='idx-table-message-row'>
+                <td colSpan={columnCount} className='idx-table-empty-cell idx-table-error-cell'>
+                  {error}
                 </td>
               </tr>
-            ))}
+            )}
+            {showLoadingRow && (
+              <tr className='idx-table-message-row'>
+                <td colSpan={columnCount} className='idx-table-empty-cell'>
+                  Memuat kandidat...
+                </td>
+              </tr>
+            )}
+            {showEmptyRow && emptyMessage != null && (
+              <tr className='idx-table-message-row'>
+                <td colSpan={columnCount} className='idx-table-empty-cell'>
+                  {emptyMessage}
+                </td>
+              </tr>
+            )}
+            {!showErrorRow &&
+              !showLoadingRow &&
+              !showEmptyRow &&
+              data.map((candidateRow) => (
+                <tr
+                  key={candidateRow.code}
+                  tabIndex={0}
+                  role='button'
+                  onClick={() => onRowClick(candidateRow.code)}
+                  onKeyDown={(event) => handleRowKeyDown(candidateRow.code, event)}
+                  aria-label={`Buka detail ${candidateRow.code} ${candidateRow.name ?? ''}`}
+                >
+                  <td className='idx-table-col-kode'>
+                    <span className='idx-table-code-bold'>{candidateRow.code}</span>
+                  </td>
+                  <td className='idx-table-col-nama'>{candidateRow.name ?? '-'}</td>
+                  <td className='idx-table-col-sector'>{candidateRow.sector ?? '-'}</td>
+                  <td className='idx-table-td-right'>
+                    {Utils.Format.formatNum(candidateRow.per, 1)}
+                  </td>
+                  <td className='idx-table-td-right'>
+                    {Utils.Format.formatNum(candidateRow.roe, 1)}
+                  </td>
+                  <td className='idx-table-td-right'>
+                    {Utils.Format.formatNum(candidateRow.der, 1)}
+                  </td>
+                  <td className='idx-table-td-right'>
+                    <span
+                      className={candidateRow.week26PC != null
+                        ? candidateRow.week26PC >= 0 ? 'idx-pct idx-pct-up' : 'idx-pct idx-pct-down'
+                        : ''}
+                    >
+                      {Utils.Format.formatPct(candidateRow.week26PC ?? null)}
+                    </span>
+                  </td>
+                  <td className='idx-table-td-right'>
+                    <span
+                      className={candidateRow.week52PC != null
+                        ? candidateRow.week52PC >= 0 ? 'idx-pct idx-pct-up' : 'idx-pct idx-pct-down'
+                        : ''}
+                    >
+                      {Utils.Format.formatPct(candidateRow.week52PC ?? null)}
+                    </span>
+                  </td>
+                  <td className='idx-table-td-right'>
+                    {Utils.Format.formatNum(candidateRow.compositePercentile, 0)}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

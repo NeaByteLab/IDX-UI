@@ -6,7 +6,7 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import { BarChart3, History, Home as HomeIcon, Info, LineChart } from 'lucide-react'
 import Home from '@app/pages/Home.tsx'
@@ -16,7 +16,7 @@ import Historical from '@app/pages/Historical.tsx'
 
 export default function App() {
   const location = useLocation()
-  const isActive = (path: string) => location.pathname === path
+  const isActive = useCallback((path: string) => location.pathname === path, [location.pathname])
 
   return (
     <div className='idx-page'>

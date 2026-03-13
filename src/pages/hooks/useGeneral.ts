@@ -19,7 +19,7 @@ export function useGeneral() {
     let isCancelled = false
     setLoading(true)
     setError(null)
-    Hooks.useClient<Types.GeneralResponse>('/api/general')
+    Hooks.fetchApi<Types.GeneralResponse>('/api/general')
       .then((responseData) => {
         if (!isCancelled) {
           setData(responseData)

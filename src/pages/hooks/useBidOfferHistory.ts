@@ -24,7 +24,7 @@ export function useBidOfferHistory(start: number, end: number) {
       setError(null)
       const params = { start, end }
       const opts = signal ? { signal } : undefined
-      Hooks.useClient<Types.HistoryBidOfferResponse>('/api/history/bid-offer', params, opts)
+      Hooks.fetchApi<Types.HistoryBidOfferResponse>('/api/history/bid-offer', params, opts)
         .then((result) => {
           if (requestIdRef.current === myId) {
             setData(result)

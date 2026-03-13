@@ -25,10 +25,7 @@ export function useRSI(stockCode: string | null, periodDays: Types.ForeignPeriod
     setError(null)
     const end = Utils.Format.getTodayDateInt()
     const start = Utils.Format.addDaysToDateInt(end, -periodDays)
-    Hooks.useClient<Types.RsiResponse>(
-      `/api/${stockCode.trim().toUpperCase()}/rsi`,
-      { start, end }
-    )
+    Hooks.fetchApi<Types.RsiResponse>(`/api/${stockCode.trim().toUpperCase()}/rsi`, { start, end })
       .then(setData)
       .catch((err) => {
         setError(err instanceof Error ? err.message : String(err))

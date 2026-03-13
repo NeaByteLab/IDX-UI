@@ -27,7 +27,7 @@ export function useStockDetail() {
       if (date != null) {
         queryParams['date'] = date
       }
-      Hooks.useClient<Types.StockDetail>(
+      Hooks.fetchApi<Types.StockDetail>(
         `/api/stock/${stockCode.trim().toUpperCase()}/detail`,
         queryParams
       )

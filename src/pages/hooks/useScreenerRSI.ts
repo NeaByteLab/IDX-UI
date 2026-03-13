@@ -18,7 +18,7 @@ export function useScreenerRsi() {
   const fetchRsi = useCallback(() => {
     setLoading(true)
     setError(null)
-    Hooks.useClient<Types.ScreenerRsiResponse>('/api/screener/rsi')
+    Hooks.fetchApi<Types.ScreenerRsiResponse>('/api/screener/rsi')
       .then(setData)
       .catch((err) => {
         setError(err instanceof Error ? err.message : String(err))

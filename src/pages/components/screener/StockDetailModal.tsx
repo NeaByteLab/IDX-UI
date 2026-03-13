@@ -6,7 +6,7 @@
  * Fullstack developer with a focus on security and experience in trading systems.
  */
 
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BarChart2, LineChart as LineChartIcon, TrendingUp, X } from 'lucide-react'
 import {
   Area,
@@ -26,13 +26,46 @@ import * as Hooks from '@app/pages/hooks/index.ts'
 import * as Utils from '@app/pages/utils/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
-const FOREIGN_PERIODS: { days: Types.ForeignPeriodDays; label: string }[] = [
+const foreignPeriodOptions: Types.ForeignPeriodOption[] = [
   { days: 30, label: '1 bln' },
   { days: 60, label: '2 bln' },
   { days: 90, label: '3 bln' },
   { days: 180, label: '6 bln' },
   { days: 360, label: '1 tahun' }
 ]
+
+function buildRsiChartData(rsiData: Types.RsiResponse | null): {
+  chartData: Types.RsiChartPoint[]
+  hasSector: boolean
+} {
+  if (!rsiData?.data?.length) {
+    return { chartData: [], hasSector: false }
+  }
+  const byDate = new Map<string, Types.RsiChartPoint>()
+  for (const row of rsiData.data) {
+    const dateStr = Utils.Format.formatDateInt(row.date)
+    byDate.set(dateStr, {
+      date: dateStr,
+      rsi: row.rsi ?? 0,
+      sectorRsi: null
+    })
+  }
+  if (rsiData.sectorData?.length) {
+    for (const row of rsiData.sectorData) {
+      const dateStr = Utils.Format.formatDateInt(row.date)
+      const existing = byDate.get(dateStr)
+      const sectorVal = row.rsi != null && Number.isFinite(row.rsi) ? row.rsi : null
+      if (existing) {
+        existing.sectorRsi = sectorVal
+      } else {
+        byDate.set(dateStr, { date: dateStr, rsi: 0, sectorRsi: sectorVal })
+      }
+    }
+  }
+  const chartData = Array.from(byDate.values()).sort((a, b) => a.date.localeCompare(b.date, 'en'))
+  const hasSector = chartData.some((d) => d.sectorRsi != null)
+  return { chartData, hasSector }
+}
 
 export default function StockDetailModal({
   detail,
@@ -42,6 +75,8 @@ export default function StockDetailModal({
 }: Types.StockDetailModalProps) {
   const [activeTab, setActiveTab] = useState<Types.DetailTab>('fundamental')
   const [foreignPeriodDays, setForeignPeriodDays] = useState<Types.ForeignPeriodDays>(90)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const previousActiveRef = useRef<HTMLElement | null>(null)
   const {
     data: rsiData,
     loading: rsiLoading,
@@ -66,7 +101,7 @@ export default function StockDetailModal({
       return undefined
     }
     const closes = chartData
-      .map((chartPoint: { date: string; close: number }) => chartPoint.close)
+      .map((chartPoint: Types.PriceLinePoint) => chartPoint.close)
       .filter((closePrice: number) => closePrice > 0)
     if (closes.length === 0) {
       return undefined
@@ -76,8 +111,26 @@ export default function StockDetailModal({
     return [Math.max(minClose, 1), maxClose]
   }, [chartData])
 
+  const rsiChartData = useMemo(() => buildRsiChartData(rsiData ?? null), [rsiData])
+
+  useEffect(() => {
+    if (!detail) {
+      return
+    }
+    previousActiveRef.current = document.activeElement as HTMLElement | null
+    closeButtonRef.current?.focus()
+    return () => {
+      previousActiveRef.current?.focus?.()
+    }
+  }, [detail])
+
+  const handleClose = useCallback(() => {
+    previousActiveRef.current?.focus?.()
+    onClose()
+  }, [onClose])
+
   return (
-    <div className='idx-modal-overlay' onClick={onClose} role='presentation'>
+    <div className='idx-modal-overlay' onClick={handleClose} role='presentation'>
       <div
         className='idx-modal'
         onClick={(event) => event.stopPropagation()}
@@ -90,12 +143,13 @@ export default function StockDetailModal({
             <span>{detail ? `${detail.code}: ${detail.name ?? ''}` : 'Detail Saham'}</span>
           </h2>
           <button
+            ref={closeButtonRef}
             type='button'
             className='idx-modal-close'
-            onClick={onClose}
+            onClick={handleClose}
             aria-label='Tutup Modal'
           >
-            <X size={20} />
+            <X size={20} aria-hidden />
           </button>
         </div>
         <div className='idx-modal-body'>
@@ -311,7 +365,7 @@ export default function StockDetailModal({
                   <div className='idx-foreign-header idx-mb-16'>
                     <label className='idx-form-label'>Periode</label>
                     <div className='idx-tabs'>
-                      {FOREIGN_PERIODS.map(({ days, label }) => (
+                      {foreignPeriodOptions.map(({ days, label }) => (
                         <button
                           key={days}
                           type='button'
@@ -334,132 +388,95 @@ export default function StockDetailModal({
                     </label>
                     {rsiLoading && <div className='idx-loading'>Memuat RSI...</div>}
                     {rsiError && <div className='idx-error'>{rsiError}</div>}
-                    {!rsiLoading &&
-                      !rsiError &&
-                      rsiData &&
-                      rsiData.data.length > 0 &&
-                      (() => {
-                        const byDate = new Map<
-                          string,
-                          { date: string; rsi: number; sectorRsi: number | null }
-                        >()
-                        for (const row of rsiData.data) {
-                          const dateStr = Utils.Format.formatDateInt(row.date)
-                          byDate.set(dateStr, {
-                            date: dateStr,
-                            rsi: row.rsi ?? 0,
-                            sectorRsi: null
-                          })
-                        }
-                        if (rsiData.sectorData?.length) {
-                          for (const row of rsiData.sectorData) {
-                            const dateStr = Utils.Format.formatDateInt(row.date)
-                            const existing = byDate.get(dateStr)
-                            const sectorVal = row.rsi != null && Number.isFinite(row.rsi)
-                              ? row.rsi
-                              : null
-                            if (existing) {
-                              existing.sectorRsi = sectorVal
-                            } else {
-                              byDate.set(dateStr, { date: dateStr, rsi: 0, sectorRsi: sectorVal })
-                            }
-                          }
-                        }
-                        const chartData = Array.from(byDate.values()).sort((a, b) =>
-                          a.date.localeCompare(b.date, 'en')
-                        )
-                        const hasSector = chartData.some((d) => d.sectorRsi != null)
-                        return (
-                          <div className='idx-chart-container'>
-                            <ResponsiveContainer width='100%' height='100%'>
-                              <LineChart
-                                data={chartData}
-                                margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
-                              >
-                                <XAxis
-                                  dataKey='date'
-                                  axisLine={false}
-                                  tickLine={false}
-                                  tick={{ fill: 'var(--idx-text-muted)', fontSize: 10 }}
-                                />
-                                <YAxis
-                                  domain={[0, 100]}
-                                  orientation='right'
-                                  axisLine={false}
-                                  tickLine={false}
-                                  tick={{ fill: 'var(--idx-text-muted)', fontSize: 10 }}
-                                />
-                                <Tooltip
-                                  content={({ active, payload, label }) => {
-                                    if (!active || !payload?.length || !label) {
-                                      return null
-                                    }
-                                    const p = payload[0]?.payload
-                                    if (p == null) {
-                                      return null
-                                    }
-                                    return (
-                                      <div className='idx-foreign-tooltip'>
-                                        <div className='idx-foreign-tooltip-label'>
-                                          {Utils.Format.formatTitleCase(String(label))}
-                                        </div>
-                                        <div className='idx-tooltip-row'>
-                                          <span className='idx-tooltip-swatch idx-tooltip-swatch-emiten' />
-                                          <span>
-                                            {Utils.Format.formatTitleCase('RSI (emiten)')}:{' '}
-                                            {Utils.Format.formatNum(p.rsi, 2)}
-                                          </span>
-                                        </div>
-                                        {p.sectorRsi != null && (
-                                          <div className='idx-tooltip-row'>
-                                            <span className='idx-tooltip-swatch idx-tooltip-swatch-sector' />
-                                            <span>
-                                              {Utils.Format.formatTitleCase('RSI sektor (rata)')}:
-                                              {' '}
-                                              {Utils.Format.formatNum(p.sectorRsi, 2)}
-                                            </span>
-                                          </div>
-                                        )}
+                    {!rsiLoading && !rsiError && rsiChartData.chartData.length > 0 && (
+                      <div className='idx-chart-container'>
+                        <ResponsiveContainer width='100%' height='100%'>
+                          <LineChart
+                            data={rsiChartData.chartData}
+                            margin={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                          >
+                            <XAxis
+                              dataKey='date'
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: 'var(--idx-text-muted)', fontSize: 10 }}
+                            />
+                            <YAxis
+                              domain={[0, 100]}
+                              orientation='right'
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: 'var(--idx-text-muted)', fontSize: 10 }}
+                            />
+                            <Tooltip
+                              content={({ active, payload, label }) => {
+                                if (!active || !payload?.length || !label) {
+                                  return null
+                                }
+                                const p = payload[0]?.payload
+                                if (p == null) {
+                                  return null
+                                }
+                                return (
+                                  <div className='idx-foreign-tooltip'>
+                                    <div className='idx-foreign-tooltip-label'>
+                                      {Utils.Format.formatTitleCase(String(label))}
+                                    </div>
+                                    <div className='idx-tooltip-row'>
+                                      <span className='idx-tooltip-swatch idx-tooltip-swatch-emiten' />
+                                      <span>
+                                        {Utils.Format.formatTitleCase('RSI (emiten)')}:{' '}
+                                        {Utils.Format.formatNum(p.rsi, 2)}
+                                      </span>
+                                    </div>
+                                    {p.sectorRsi != null && (
+                                      <div className='idx-tooltip-row'>
+                                        <span className='idx-tooltip-swatch idx-tooltip-swatch-sector' />
+                                        <span>
+                                          {Utils.Format.formatTitleCase('RSI sektor (rata)')}:{' '}
+                                          {Utils.Format.formatNum(p.sectorRsi, 2)}
+                                        </span>
                                       </div>
-                                    )
-                                  }}
-                                />
-                                <ReferenceLine
-                                  y={30}
-                                  stroke='var(--idx-text-muted)'
-                                  strokeDasharray='2 2'
-                                />
-                                <ReferenceLine
-                                  y={70}
-                                  stroke='var(--idx-text-muted)'
-                                  strokeDasharray='2 2'
-                                />
-                                <Line
-                                  type='monotone'
-                                  dataKey='rsi'
-                                  name='Emiten'
-                                  stroke='var(--idx-primary)'
-                                  strokeWidth={2}
-                                  dot={false}
-                                  isAnimationActive={false}
-                                />
-                                {hasSector && (
-                                  <Line
-                                    type='monotone'
-                                    dataKey='sectorRsi'
-                                    name='Sektor'
-                                    stroke='var(--idx-text-secondary)'
-                                    strokeWidth={1.5}
-                                    strokeDasharray='4 2'
-                                    dot={false}
-                                    isAnimationActive={false}
-                                  />
-                                )}
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                        )
-                      })()}
+                                    )}
+                                  </div>
+                                )
+                              }}
+                            />
+                            <ReferenceLine
+                              y={30}
+                              stroke='var(--idx-text-muted)'
+                              strokeDasharray='2 2'
+                            />
+                            <ReferenceLine
+                              y={70}
+                              stroke='var(--idx-text-muted)'
+                              strokeDasharray='2 2'
+                            />
+                            <Line
+                              type='monotone'
+                              dataKey='rsi'
+                              name='Emiten'
+                              stroke='var(--idx-primary)'
+                              strokeWidth={2}
+                              dot={false}
+                              isAnimationActive={false}
+                            />
+                            {rsiChartData.hasSector && (
+                              <Line
+                                type='monotone'
+                                dataKey='sectorRsi'
+                                name='Sektor'
+                                stroke='var(--idx-text-secondary)'
+                                strokeWidth={1.5}
+                                strokeDasharray='4 2'
+                                dot={false}
+                                isAnimationActive={false}
+                              />
+                            )}
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    )}
                     {!rsiLoading && !rsiError && rsiData && rsiData.data.length === 0 && (
                       <p className='idx-p-muted'>Tidak ada data RSI untuk periode ini.</p>
                     )}

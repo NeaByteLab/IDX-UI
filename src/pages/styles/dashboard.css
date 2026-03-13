@@ -157,7 +157,7 @@
   color: var(--idx-white);
 }
 
-.idx-tab:hover {
+.idx-tab:not(.idx-tab-active):hover {
   color: var(--idx-deep);
 }
 

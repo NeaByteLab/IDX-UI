@@ -27,12 +27,7 @@ export default function RsiMarketView({
   loading,
   error,
   onRefetch
-}: {
-  data: Types.ScreenerRsiResponse | null
-  loading: boolean
-  error: string | null
-  onRefetch: () => void
-}) {
+}: Types.RsiMarketViewProps) {
   const chartData = useMemo(() => {
     if (!data?.data?.bySector) {
       return []

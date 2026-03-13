@@ -19,7 +19,7 @@ export function useScreenerBidOffer(date?: number) {
     setLoading(true)
     setError(null)
     const params = date != null ? { date } : undefined
-    Hooks.useClient<Types.ScreenerBidOfferResponse>('/api/screener/bid-offer', params)
+    Hooks.fetchApi<Types.ScreenerBidOfferResponse>('/api/screener/bid-offer', params)
       .then(setData)
       .catch((err) => {
         setError(err instanceof Error ? err.message : String(err))

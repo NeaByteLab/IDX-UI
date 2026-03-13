@@ -90,7 +90,9 @@ export default function SectorStrength({
         </div>
       </div>
       {loading && <div className='idx-loading'>Memuat...</div>}
-      {!loading && data && data.length === 0 && <div className='idx-loading'>Tidak Ada Data</div>}
+      {!loading && data && data.length === 0 && (
+        <p className='idx-p-muted idx-py-16'>Tidak ada data sektor.</p>
+      )}
       {!loading && data && data.length > 0 && (
         <>
           <div className='idx-sector-chart-wrap'>
@@ -107,15 +109,15 @@ export default function SectorStrength({
                   paddingAngle={1}
                   isAnimationActive={false}
                 >
-                  {chartData.map((pieSegment, index) => (
-                    <Cell key={`cell-${index}`} fill={pieSegment.fill ?? '#999'} />
+                  {chartData.map((pieSegment) => (
+                    <Cell key={pieSegment.sector} fill={pieSegment.fill ?? '#999'} />
                   ))}
                 </Pie>
                 <Tooltip
                   formatter={(
                     cellValue: unknown,
                     _name: unknown,
-                    tooltipItem: { payload?: { sector: string; avgMomentum: number } }
+                    tooltipItem: { payload?: Types.SectorStrengthTooltipPayload }
                   ) => {
                     const payload = tooltipItem?.payload
                     const count = typeof cellValue === 'number' ? cellValue : 0

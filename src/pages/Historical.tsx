@@ -12,15 +12,16 @@ import * as Hooks from '@app/pages/hooks/index.ts'
 import * as Utils from '@app/pages/utils/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
+const historicalPresets: { days: number; label: string }[] = [
+  { days: 7, label: '1W' },
+  { days: 14, label: '2W' },
+  { days: 30, label: '1M' },
+  { days: 90, label: '3M' },
+  { days: 180, label: '6M' },
+  { days: 365, label: '12M' }
+]
+
 export default function Historical() {
-  const presets: { days: number; label: string }[] = [
-    { days: 7, label: '1W' },
-    { days: 14, label: '2W' },
-    { days: 30, label: '1M' },
-    { days: 90, label: '3M' },
-    { days: 180, label: '6M' },
-    { days: 365, label: '12M' }
-  ]
   const [periodDays, setPeriodDays] = useState<number>(30)
   const todayInt = useMemo(() => Utils.Format.getTodayDateInt(), [])
   const end = todayInt
@@ -40,14 +41,14 @@ export default function Historical() {
           <div>
             <h2 className='idx-dashboard-title'>
               <History size={28} strokeWidth={2} aria-hidden />
-              <span>Historical Bid vs Offer</span>
+              <span>Bid vs Offer Historis</span>
             </h2>
             <p className='idx-dashboard-subtitle'>
-              Period: {Utils.Format.formatDateInt(start)} &ndash; {Utils.Format.formatDateInt(end)}
+              Periode: {Utils.Format.formatDateInt(start)} &ndash; {Utils.Format.formatDateInt(end)}
             </p>
           </div>
           <div className='idx-tabs'>
-            {presets.map((preset) => (
+            {historicalPresets.map((preset) => (
               <button
                 key={preset.days}
                 type='button'
@@ -61,11 +62,11 @@ export default function Historical() {
             ))}
           </div>
         </div>
-        {loading && <div className='idx-loading'>Loading historical bid/offer...</div>}
+        {loading && <div className='idx-loading'>Memuat data bid/offer historis...</div>}
         {!loading && error && <div className='idx-error'>{error}</div>}
         {!loading && !error && sectorRows.length === 0 && (
           <div className='idx-card-center'>
-            <p className='idx-p-muted'>No historical bid/offer data for this period.</p>
+            <p className='idx-p-muted'>Tidak ada data bid/offer historis untuk periode ini.</p>
           </div>
         )}
         {!loading && !error && sectorRows.length > 0 && (
@@ -77,8 +78,8 @@ export default function Historical() {
                   <th>Total Bid</th>
                   <th>Total Offer</th>
                   <th>Hari</th>
-                  <th>Avg Bid/Hari</th>
-                  <th>Avg Offer/Hari</th>
+                  <th>Rata-rata Bid/Hari</th>
+                  <th>Rata-rata Offer/Hari</th>
                   <th>Bid/Offer</th>
                 </tr>
               </thead>
@@ -104,7 +105,8 @@ export default function Historical() {
                                 style={{
                                   width: `${
                                     (sectorItem.totalOffer /
-                                      (sectorItem.totalBid + sectorItem.totalOffer)) * 100
+                                      (sectorItem.totalBid + sectorItem.totalOffer)) *
+                                    100
                                   }%`
                                 }}
                               />
@@ -113,7 +115,8 @@ export default function Historical() {
                                 style={{
                                   width: `${
                                     (sectorItem.totalBid /
-                                      (sectorItem.totalBid + sectorItem.totalOffer)) * 100
+                                      (sectorItem.totalBid + sectorItem.totalOffer)) *
+                                    100
                                   }%`
                                 }}
                               />

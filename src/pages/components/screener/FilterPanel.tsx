@@ -34,7 +34,6 @@ export default function FilterPanel({
   const updateFilterParam = (key: keyof Types.CandidatesParams, paramValue: unknown) => {
     onParamsChange({ [key]: paramValue })
   }
-
   const [isCollapsed, setCollapsed] = useState(true)
 
   return (
@@ -53,7 +52,6 @@ export default function FilterPanel({
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronDown size={18} />}
         </span>
       </button>
-
       {!isCollapsed && (
         <>
           <div className='idx-filter-grid'>
@@ -67,8 +65,11 @@ export default function FilterPanel({
               </p>
               <div className='idx-filter-group-fields'>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>Pilih Sektor</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-sector'>
+                    Pilih Sektor
+                  </label>
                   <select
+                    id='idx-filter-sector'
                     className='idx-select'
                     value={sectorFilter}
                     onChange={(event) => onSectorFilterChange(event.target.value)}
@@ -83,7 +84,6 @@ export default function FilterPanel({
                 </div>
               </div>
             </div>
-
             <div className='idx-filter-group'>
               <p className='idx-filter-group-title'>
                 <DollarSign size={16} aria-hidden />
@@ -94,8 +94,11 @@ export default function FilterPanel({
               </p>
               <div className='idx-filter-group-fields'>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>PER Min</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-perMin'>
+                    PER Min
+                  </label>
                   <input
+                    id='idx-filter-perMin'
                     type='number'
                     className='idx-input'
                     placeholder='0'
@@ -110,8 +113,11 @@ export default function FilterPanel({
                   />
                 </div>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>PER Max</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-perMax'>
+                    PER Max
+                  </label>
                   <input
+                    id='idx-filter-perMax'
                     type='number'
                     className='idx-input'
                     placeholder='25'
@@ -127,7 +133,6 @@ export default function FilterPanel({
                 </div>
               </div>
             </div>
-
             <div className='idx-filter-group'>
               <p className='idx-filter-group-title'>
                 <PieChart size={16} aria-hidden />
@@ -138,8 +143,11 @@ export default function FilterPanel({
               </p>
               <div className='idx-filter-group-fields'>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>ROE Min (%)</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-roeMin'>
+                    ROE Min (%)
+                  </label>
                   <input
+                    id='idx-filter-roeMin'
                     type='number'
                     className='idx-input'
                     placeholder='0'
@@ -153,8 +161,11 @@ export default function FilterPanel({
                   />
                 </div>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>DER Max</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-derMax'>
+                    DER Max
+                  </label>
                   <input
+                    id='idx-filter-derMax'
                     type='number'
                     className='idx-input'
                     placeholder='2'
@@ -170,7 +181,6 @@ export default function FilterPanel({
                 </div>
               </div>
             </div>
-
             <div className='idx-filter-group'>
               <p className='idx-filter-group-title'>
                 <TrendingUp size={16} aria-hidden />
@@ -181,8 +191,11 @@ export default function FilterPanel({
               </p>
               <div className='idx-filter-group-fields'>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>Periode</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-momentumWeek'>
+                    Periode
+                  </label>
                   <select
+                    id='idx-filter-momentumWeek'
                     className='idx-select'
                     value={params.momentumWeek ?? 26}
                     onChange={(event) =>
@@ -193,8 +206,11 @@ export default function FilterPanel({
                   </select>
                 </div>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>Momentum Min (%)</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-momentumMin'>
+                    Momentum Min (%)
+                  </label>
                   <input
+                    id='idx-filter-momentumMin'
                     type='number'
                     className='idx-input'
                     placeholder='0'
@@ -209,7 +225,6 @@ export default function FilterPanel({
                 </div>
               </div>
             </div>
-
             <div className='idx-filter-group'>
               <p className='idx-filter-group-title'>
                 <Droplets size={16} aria-hidden />
@@ -220,8 +235,11 @@ export default function FilterPanel({
               </p>
               <div className='idx-filter-group-fields'>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>Min Value (Rp)</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-minValue'>
+                    Min Value (Rp)
+                  </label>
                   <input
+                    id='idx-filter-minValue'
                     type='number'
                     className='idx-input'
                     placeholder='0'
@@ -235,8 +253,11 @@ export default function FilterPanel({
                   />
                 </div>
                 <div className='idx-form-group'>
-                  <label className='idx-form-label'>Min Volume</label>
+                  <label className='idx-form-label' htmlFor='idx-filter-minVolume'>
+                    Min Volume
+                  </label>
                   <input
+                    id='idx-filter-minVolume'
                     type='number'
                     className='idx-input'
                     placeholder='0'
@@ -251,7 +272,6 @@ export default function FilterPanel({
                 </div>
               </div>
             </div>
-
             <div className='idx-filter-group'>
               <p className='idx-filter-group-title'>
                 <Ban size={16} aria-hidden />
@@ -289,7 +309,6 @@ export default function FilterPanel({
               </div>
             </div>
           </div>
-
           <div className='idx-filter-actions'>
             <button type='button' className='idx-btn' onClick={onDefaultFilter}>
               <RotateCcw size={16} aria-hidden />

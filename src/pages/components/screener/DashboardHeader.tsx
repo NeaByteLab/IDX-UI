@@ -48,7 +48,7 @@ export default function DashboardHeader({
           title='Muat Ulang Data'
           aria-label='Muat Ulang Data'
         >
-          <RefreshCw size={18} />
+          <RefreshCw size={18} aria-hidden />
         </button>
       </div>
     </div>
