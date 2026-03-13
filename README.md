@@ -115,6 +115,7 @@ deno task ui:dev
 ## Dokumentasi
 
 - **[Referensi API](API.md)** — Endpoint, parameter, return, dan contoh `curl` untuk integrasi & testing.
+- **[Contoh Tata Cara Menganalisa](https://x.com/NeaByteLab/status/2032285129696296987)** — Panduan singkat analisa dengan data screener (X / Twitter).
 
 ## Build & Tes
 

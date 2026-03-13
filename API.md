@@ -72,10 +72,12 @@ GET /api/candidates
   - `perMin` `<number>`: (Opsional) PER minimal.
   - `qw` `<number>`: (Opsional) Bobot quality (komposit).
   - `roeMin` `<number>`: (Opsional) ROE minimal.
+  - `search` `<string>`: (Opsional) Filter kandidat: kode, nama emiten, atau sektor mengandung teks ini (case insensitive).
   - `vw` `<number>`: (Opsional) Bobot value (komposit).
+  - `sector` `<string>`: (Opsional) Filter kandidat hanya dari sektor ini (exact match).
   - `withSectorRank` `<boolean>`: (Opsional) Sertakan sectorRank dan sectorPercentile per saham.
 - Return: `{ date, totalCount, limit, offset, serverTimestamp, data[] }`
-- Deskripsi: Saham terfilter (fundamental + likuiditas + flag) dengan skor komposit dan pagination.
+- Deskripsi: Saham terfilter (fundamental + likuiditas + flag + sector + search) dengan skor komposit dan pagination.
 
 **Contoh:**
 
