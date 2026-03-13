@@ -167,6 +167,45 @@
   text-align: right;
 }
 
+.idx-table th.idx-table-col-watchlist,
+.idx-table td.idx-table-col-watchlist {
+  width: 44px;
+  min-width: 44px;
+  text-align: center;
+  padding-left: var(--idx-space-12);
+  padding-right: var(--idx-space-12);
+}
+
+.idx-table-star-header {
+  color: var(--idx-text-muted);
+  opacity: 0.6;
+}
+
+.idx-watchlist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--idx-space-4);
+  border: none;
+  background: transparent;
+  color: var(--idx-text-muted);
+  cursor: pointer;
+  border-radius: var(--idx-radius);
+  transition: color 0.2s, transform 0.15s;
+}
+
+.idx-watchlist-btn:hover {
+  color: var(--idx-primary);
+}
+
+.idx-watchlist-btn.idx-watchlist-on {
+  color: var(--idx-primary);
+}
+
+.idx-watchlist-btn.idx-watchlist-on svg {
+  fill: currentColor;
+}
+
 .idx-table th.idx-table-col-kode,
 .idx-table td.idx-table-col-kode {
   min-width: 72px;

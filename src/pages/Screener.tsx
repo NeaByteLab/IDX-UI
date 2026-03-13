@@ -7,7 +7,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { BarChart2, TrendingUp } from 'lucide-react'
+import { BarChart2, Star, TrendingUp } from 'lucide-react'
 import * as ScreenerComps from '@app/pages/components/screener/index.ts'
 import * as Hooks from '@app/pages/hooks/index.ts'
 import * as Utils from '@app/pages/utils/index.ts'
@@ -43,6 +43,7 @@ export default function Screener() {
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastSearchForRequestRef = useRef<string>('')
   const { data: generalData } = Hooks.useGeneral()
+  const { watchlistRows, watchlistCodes, toggleWatchlist } = Hooks.useWatchlist()
   const {
     data: screenerRsiData,
     loading: screenerRsiLoading,
@@ -172,12 +173,20 @@ export default function Screener() {
     <div className='idx-page'>
       <div className='idx-main'>
         <ScreenerComps.DashboardHeader
-          totalCount={totalCount}
+          totalCount={mainTab === 'watchlist' ? watchlistRows.length : totalCount}
           date={dataDate}
           onRefresh={refetchCandidates}
-          loading={candidatesLoading}
+          loading={mainTab === 'watchlist' ? false : candidatesLoading}
         />
         <div className='idx-tabs idx-mb-24'>
+          <button
+            type='button'
+            className={`idx-tab idx-tab-inline ${mainTab === 'watchlist' ? 'idx-tab-active' : ''}`}
+            onClick={() => setMainTab('watchlist')}
+          >
+            <Star size={16} aria-hidden />
+            <span>Watchlist</span>
+          </button>
           <button
             type='button'
             className={`idx-tab idx-tab-inline ${
@@ -225,6 +234,8 @@ export default function Screener() {
                   emptyMessage={searchForRequest !== ''
                     ? 'Tidak ada hasil untuk pencarian ini.'
                     : 'Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik "Reset Ke Default".'}
+                  watchlistCodes={watchlistCodes}
+                  onWatchlistToggle={toggleWatchlist}
                 />
               </div>
             </div>
@@ -251,6 +262,23 @@ export default function Screener() {
               loading={screenerBidOfferLoading}
               error={screenerBidOfferError}
               onRefetch={refetchScreenerBidOffer}
+            />
+          </div>
+        )}
+        {mainTab === 'watchlist' && (
+          <div className='idx-mt-24'>
+            <ScreenerComps.CandidatesTable
+              data={watchlistRows}
+              limit={watchlistRows.length || 10}
+              offset={0}
+              totalCount={watchlistRows.length}
+              onPage={handlePageChange}
+              onRowClick={handleRowClick}
+              loading={false}
+              error={null}
+              emptyMessage='Belum ada emiten di watchlist. Dari tab Analisa Fundamental, klik bintang di baris kandidat untuk menambah.'
+              watchlistCodes={watchlistCodes}
+              onWatchlistToggle={toggleWatchlist}
             />
           </div>
         )}

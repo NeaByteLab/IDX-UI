@@ -79,6 +79,8 @@ export interface CandidatesTableProps {
   loading?: boolean
   error?: string | null
   emptyMessage?: string
+  watchlistCodes?: string[]
+  onWatchlistToggle?: (code: string, row?: CandidateTableRow) => void
 }
 
 export interface ClientOptions {
@@ -169,7 +171,7 @@ export interface HistorySectorAggregate {
 
 export type HomeTab = 'methodology' | 'score' | 'filter' | 'howTo'
 
-export type MainAnalysisTab = 'fundamental' | 'technical'
+export type MainAnalysisTab = 'fundamental' | 'technical' | 'watchlist'
 
 export interface OhlcApiRow extends StockDetailOhlcRow {
   bidVolume: number | null
