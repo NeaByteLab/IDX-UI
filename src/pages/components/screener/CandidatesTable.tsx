@@ -7,7 +7,7 @@
  */
 
 import React from 'react'
-import { ChevronLeft, ChevronRight, Search, Star } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Search, Star } from 'lucide-react'
 import * as Utils from '@app/pages/utils/index.ts'
 import type * as Types from '@app/pages/Types.ts'
 
@@ -27,7 +27,9 @@ export default function CandidatesTable({
   error = null,
   emptyMessage,
   watchlistCodes,
-  onWatchlistToggle
+  onWatchlistToggle,
+  onExport,
+  exportLoading = false
 }: Types.CandidatesTableProps) {
   const hasWatchlist = watchlistCodes != null && onWatchlistToggle != null
   const columnCount = hasWatchlist ? dataColumnCount + 1 : dataColumnCount
@@ -207,6 +209,18 @@ export default function CandidatesTable({
           {totalCountLabel != null && ` (${totalCountLabel})`}
         </span>
         <div className="idx-pagination-actions">
+          {onExport != null && (
+            <button
+              type="button"
+              className="idx-btn"
+              onClick={onExport}
+              disabled={exportLoading || totalCount === 0 || loading}
+              aria-label="Export ke Excel"
+            >
+              <Download size={16} aria-hidden />
+              <span>{exportLoading ? 'Mengekspor...' : 'Export Excel'}</span>
+            </button>
+          )}
           <button
             type="button"
             className="idx-btn"

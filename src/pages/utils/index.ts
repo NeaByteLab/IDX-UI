@@ -7,3 +7,4 @@
  */
 
 export { default as Format } from '@app/pages/utils/Format.ts'
+export { exportCandidatesToExcel } from '@app/pages/utils/exportExcel.ts'

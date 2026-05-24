@@ -89,6 +89,7 @@
     "react-router-dom": "npm:react-router-dom@^7.13.1",
     "lucide-react": "npm:lucide-react@^0.577.0",
     "recharts": "npm:recharts@^3.8.0",
+    "xlsx": "npm:xlsx@^0.18.5",
     "vite": "npm:vite@^7.3.1",
     "@libsql/client": "npm:@libsql/client@^0.17.0",
     "drizzle-orm": "npm:drizzle-orm@^0.45.1",

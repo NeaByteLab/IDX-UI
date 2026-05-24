@@ -40,6 +40,7 @@ export default function Screener() {
   const [searchForRequest, setSearchForRequest] = useState<string>('')
   const [detailCode, setDetailCode] = useState<string | null>(null)
   const [mainTab, setMainTab] = useState<Types.MainAnalysisTab>('fundamental')
+  const [exportLoading, setExportLoading] = useState(false)
   const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastSearchForRequestRef = useRef<string>('')
   const { data: generalData } = Hooks.useGeneral()
@@ -158,6 +159,22 @@ export default function Screener() {
     setSearchQuery(query)
   }, [])
 
+  const handleExport = useCallback(async () => {
+    setExportLoading(true)
+    try {
+      const allData = await Hooks.fetchApi<Types.CandidatesResponse>(
+        '/api/candidates',
+        { ...(requestParams as Record<string, string | number | boolean | undefined>), limit: 9999, offset: 0 }
+      )
+      const exportDate = allData.date !== 0 ? allData.date : (candidatesResponse?.date ?? 0)
+      Utils.exportCandidatesToExcel(allData.data, exportDate)
+    } catch (_err) {
+      // silently ignore export errors
+    } finally {
+      setExportLoading(false)
+    }
+  }, [requestParams, candidatesResponse?.date])
+
   const dataDate = candidatesResponse?.date ?? 0
   const rawData = candidatesResponse?.data ?? []
   const totalCount = candidatesResponse?.totalCount ?? 0
@@ -236,6 +253,8 @@ export default function Screener() {
                     : 'Tidak ada kandidat yang memenuhi filter. Coba longgarkan filter atau klik "Reset Ke Default".'}
                   watchlistCodes={watchlistCodes}
                   onWatchlistToggle={toggleWatchlist}
+                  onExport={handleExport}
+                  exportLoading={exportLoading}
                 />
               </div>
             </div>

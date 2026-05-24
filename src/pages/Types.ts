@@ -81,6 +81,8 @@ export interface CandidatesTableProps {
   emptyMessage?: string
   watchlistCodes?: string[]
   onWatchlistToggle?: (code: string, row?: CandidateTableRow) => void
+  onExport?: () => void
+  exportLoading?: boolean
 }
 
 export interface ClientOptions {
