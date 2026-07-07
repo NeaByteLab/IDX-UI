@@ -15,12 +15,12 @@ import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
   const { limit, offset } = Utils.parseLimitOffset(
-    Utils.queryString(ctx.query('limit')),
-    Utils.queryString(ctx.query('offset'))
+    Utils.queryString(ctx.get.query('limit')),
+    Utils.queryString(ctx.get.query('offset'))
   )
-  const valueWeightRaw = ctx.query('vw')
-  const qualityWeightRaw = ctx.query('qw')
-  const momentumWeightRaw = ctx.query('mw')
+  const valueWeightRaw = ctx.get.query('vw')
+  const qualityWeightRaw = ctx.get.query('qw')
+  const momentumWeightRaw = ctx.get.query('mw')
   const valueWeight = Utils.parseWeight(Utils.queryString(valueWeightRaw))
   const qualityWeight = Utils.parseWeight(Utils.queryString(qualityWeightRaw))
   const momentumWeight = Utils.parseWeight(Utils.queryString(momentumWeightRaw))
@@ -84,7 +84,7 @@ export async function GET(ctx: Context) {
       week52PC: fundamentals?.week52PC ?? null
     }
   })
-  const withSectorRank = Utils.parseBoolean(Utils.queryString(ctx.query('withSectorRank')))
+  const withSectorRank = Utils.parseBoolean(Utils.queryString(ctx.get.query('withSectorRank')))
   if (!withSectorRank) {
     const { data } = Utils.applyPagination(withFlags, offset, limit)
     return ctx.send.json(data)

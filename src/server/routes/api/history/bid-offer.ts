@@ -14,15 +14,15 @@ import * as Schemas from '@app/server/schemas/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const startParsed = Utils.parseDate(Utils.queryString(ctx.query('start')))
-  const endParsed = Utils.parseDate(Utils.queryString(ctx.query('end')))
+  const startParsed = Utils.parseDate(Utils.queryString(ctx.get.query('start')))
+  const endParsed = Utils.parseDate(Utils.queryString(ctx.get.query('end')))
   if (startParsed === null || endParsed === null) {
     return ctx.send.json({ error: 'start and end required (yyyymmdd, 8 digits)' }, { status: 400 })
   }
   if (endParsed < startParsed) {
     return ctx.send.json({ error: 'end must be >= start' }, { status: 400 })
   }
-  const maxDaysRaw = Utils.queryString(ctx.query('limit'))
+  const maxDaysRaw = Utils.queryString(ctx.get.query('limit'))
   const maxDaysParsed = Utils.parseNumber(maxDaysRaw)
   const maxDays = maxDaysParsed != null && maxDaysParsed > 0 ? maxDaysParsed : 365
   let start = startParsed

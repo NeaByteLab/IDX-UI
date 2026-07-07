@@ -14,12 +14,12 @@ import * as Schemas from '@app/server/schemas/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const code = ctx.param('code')
+  const code = ctx.get.param('code')
   if (!code || code.trim() === '') {
     return ctx.send.json({ error: 'Missing or invalid code' }, { status: 400 })
   }
-  const start = Utils.parseDate(Utils.queryString(ctx.query('start')))
-  const end = Utils.parseDate(Utils.queryString(ctx.query('end')))
+  const start = Utils.parseDate(Utils.queryString(ctx.get.query('start')))
+  const end = Utils.parseDate(Utils.queryString(ctx.get.query('end')))
   if (start === null || end === null) {
     return ctx.send.json({ error: 'start and end required (yyyymmdd, 8 digits)' }, { status: 400 })
   }

@@ -15,7 +15,7 @@ import * as Services from '@app/server/services/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const dateParsed = Utils.parseDate(Utils.queryString(ctx.query('date')))
+  const dateParsed = Utils.parseDate(Utils.queryString(ctx.get.query('date')))
   let dateRef = dateParsed ?? Services.CronDate.todayDateInt()
   const latestRows = await Database.select({ date: Schemas.summary.date })
     .from(Schemas.summary)

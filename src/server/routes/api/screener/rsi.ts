@@ -16,8 +16,8 @@ import * as Services from '@app/server/services/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const dateParsed = Utils.parseDate(Utils.queryString(ctx.query('date')))
-  const periodRaw = Utils.parseNumber(Utils.queryString(ctx.query('period')))
+  const dateParsed = Utils.parseDate(Utils.queryString(ctx.get.query('date')))
+  const periodRaw = Utils.parseNumber(Utils.queryString(ctx.get.query('period')))
   const period = periodRaw != null && periodRaw >= 1 && periodRaw <= 100
     ? periodRaw
     : RSI.defaultPeriod

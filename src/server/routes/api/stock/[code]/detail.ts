@@ -15,20 +15,20 @@ import * as Services from '@app/server/services/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const code = ctx.param('code')
+  const code = ctx.get.param('code')
   if (!code || code.trim() === '') {
     return ctx.send.json({ error: 'Missing or invalid code' }, { status: 400 })
   }
   const stockCode = code.trim().toUpperCase()
-  const start = Utils.parseDate(Utils.queryString(ctx.query('start')))
-  const end = Utils.parseDate(Utils.queryString(ctx.query('end')))
+  const start = Utils.parseDate(Utils.queryString(ctx.get.query('start')))
+  const end = Utils.parseDate(Utils.queryString(ctx.get.query('end')))
   if (start === null || end === null) {
     return ctx.send.json({ error: 'start and end required (yyyymmdd, 8 digits)' }, { status: 400 })
   }
   if (end < start) {
     return ctx.send.json({ error: 'end must be >= start' }, { status: 400 })
   }
-  const dateParsed = Utils.parseDate(Utils.queryString(ctx.query('date')))
+  const dateParsed = Utils.parseDate(Utils.queryString(ctx.get.query('date')))
   const dateInt = dateParsed ?? Services.CronDate.todayDateInt()
   const screenerRows = await Database.select({
     code: Schemas.screener.code,

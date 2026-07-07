@@ -14,8 +14,8 @@ import * as Schemas from '@app/server/schemas/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const week = Utils.parseWeek(Utils.queryString(ctx.query('week')))
-  const source = Utils.queryString(ctx.query('source'))
+  const week = Utils.parseWeek(Utils.queryString(ctx.get.query('week')))
+  const source = Utils.queryString(ctx.get.query('source'))
   const useOhlc = source === 'ohlc'
   if (useOhlc) {
     const maxDateRows = await Database.select({

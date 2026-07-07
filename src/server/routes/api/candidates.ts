@@ -15,31 +15,31 @@ import * as Services from '@app/server/services/index.ts'
 import type * as Types from '@app/server/Types.ts'
 
 export async function GET(ctx: Context) {
-  const dateParsed = Utils.parseDate(Utils.queryString(ctx.query('date')))
+  const dateParsed = Utils.parseDate(Utils.queryString(ctx.get.query('date')))
   const dateInt = dateParsed ?? Services.CronDate.todayDateInt()
-  const minValueRaw = ctx.query('minValue')
-  const minVolumeRaw = ctx.query('minVolume')
-  const excludeNotationRaw = ctx.query('excludeNotation')
-  const excludeCorpActionRaw = ctx.query('excludeCorpAction')
-  const excludeUmaRaw = ctx.query('excludeUma')
+  const minValueRaw = ctx.get.query('minValue')
+  const minVolumeRaw = ctx.get.query('minVolume')
+  const excludeNotationRaw = ctx.get.query('excludeNotation')
+  const excludeCorpActionRaw = ctx.get.query('excludeCorpAction')
+  const excludeUmaRaw = ctx.get.query('excludeUma')
   const minValue = Utils.parseNumber(Utils.queryString(minValueRaw))
   const minVolume = Utils.parseNumber(Utils.queryString(minVolumeRaw))
   let excludeNotation = Utils.parseBoolean(Utils.queryString(excludeNotationRaw))
   let excludeCorpAction = Utils.parseBoolean(Utils.queryString(excludeCorpActionRaw))
   let excludeUma = Utils.parseBoolean(Utils.queryString(excludeUmaRaw))
-  const perMinRaw = ctx.query('perMin')
-  const perMaxRaw = ctx.query('perMax')
-  const roeMinRaw = ctx.query('roeMin')
-  const derMaxRaw = ctx.query('derMax')
-  const momentumWeekRaw = ctx.query('momentumWeek')
-  const momentumMinRaw = ctx.query('momentumMin')
+  const perMinRaw = ctx.get.query('perMin')
+  const perMaxRaw = ctx.get.query('perMax')
+  const roeMinRaw = ctx.get.query('roeMin')
+  const derMaxRaw = ctx.get.query('derMax')
+  const momentumWeekRaw = ctx.get.query('momentumWeek')
+  const momentumMinRaw = ctx.get.query('momentumMin')
   const perMin = Utils.parseNumber(Utils.queryString(perMinRaw))
   let perMax = Utils.parseNumber(Utils.queryString(perMaxRaw))
   let roeMin = Utils.parseNumber(Utils.queryString(roeMinRaw))
   let derMax = Utils.parseNumber(Utils.queryString(derMaxRaw))
   let momentumMin = Utils.parseNumber(Utils.queryString(momentumMinRaw))
   let momentumWeek = Utils.parseWeek(Utils.queryString(momentumWeekRaw))
-  const defaultFilter = Utils.parseBoolean(Utils.queryString(ctx.query('defaultFilter')))
+  const defaultFilter = Utils.parseBoolean(Utils.queryString(ctx.get.query('defaultFilter')))
   if (defaultFilter) {
     if (!Utils.queryParamSent(excludeNotationRaw)) {
       excludeNotation = true
@@ -67,13 +67,13 @@ export async function GET(ctx: Context) {
     }
   }
   const { limit, offset } = Utils.parseLimitOffset(
-    Utils.queryString(ctx.query('limit')),
-    Utils.queryString(ctx.query('offset'))
+    Utils.queryString(ctx.get.query('limit')),
+    Utils.queryString(ctx.get.query('offset'))
   )
-  const withSectorRank = Utils.parseBoolean(Utils.queryString(ctx.query('withSectorRank')))
-  const valueWeightRaw = ctx.query('vw')
-  const qualityWeightRaw = ctx.query('qw')
-  const momentumWeightRaw = ctx.query('mw')
+  const withSectorRank = Utils.parseBoolean(Utils.queryString(ctx.get.query('withSectorRank')))
+  const valueWeightRaw = ctx.get.query('vw')
+  const qualityWeightRaw = ctx.get.query('qw')
+  const momentumWeightRaw = ctx.get.query('mw')
   const valueWeight = Utils.parseWeight(Utils.queryString(valueWeightRaw))
   const qualityWeight = Utils.parseWeight(Utils.queryString(qualityWeightRaw))
   const momentumWeight = Utils.parseWeight(Utils.queryString(momentumWeightRaw))
@@ -235,13 +235,13 @@ export async function GET(ctx: Context) {
   if (minVolume != null) {
     filteredCandidates = filteredCandidates.filter((row) => (row.volume ?? 0) >= minVolume)
   }
-  const sectorParam = Utils.queryString(ctx.query('sector'))?.trim()
+  const sectorParam = Utils.queryString(ctx.get.query('sector'))?.trim()
   if (sectorParam !== undefined && sectorParam !== '') {
     filteredCandidates = filteredCandidates.filter(
       (row) => row.sector != null && row.sector.trim() === sectorParam
     )
   }
-  const searchParam = Utils.queryString(ctx.query('search'))?.trim().toLowerCase()
+  const searchParam = Utils.queryString(ctx.get.query('search'))?.trim().toLowerCase()
   if (searchParam !== undefined && searchParam !== '') {
     filteredCandidates = filteredCandidates.filter((row) => {
       const code = row.code?.toLowerCase() ?? ''
