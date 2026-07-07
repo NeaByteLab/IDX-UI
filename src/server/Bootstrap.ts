@@ -28,8 +28,9 @@ export class Bootstrap {
       const dateInt = Bootstrap.dateIntFromDate(currentDate)
       const progress = `${processedCount + 1}/${totalDays}`
       console.log(`[bootstrap] (${progress}) stock summary date=${dateInt}`)
-      await Bootstrap.withRetry(`stockSummary:${dateInt}`, () =>
-        Services.Summary.run(client, dateInt)
+      await Bootstrap.withRetry(
+        `stockSummary:${dateInt}`,
+        () => Services.Summary.run(client, dateInt)
       )
       processedCount++
       currentDate = Bootstrap.addDays(currentDate, 1)
@@ -60,7 +61,7 @@ export class Bootstrap {
   }
 
   private static sleepMs(delayMs: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, delayMs))
+    return new Promise((resolve) => setTimeout(resolve, delayMs))
   }
 
   private static async withRetry<T>(label: string, task: () => Promise<T>): Promise<T> {

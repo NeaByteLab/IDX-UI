@@ -25,7 +25,7 @@ export class Screener {
     if (results.length === 0) {
       return
     }
-    await Database.transaction(async tx => {
+    await Database.transaction(async (tx) => {
       for (const screenerItem of results) {
         const code = screenerItem.stockCode ?? ''
         if (!code) {
@@ -46,8 +46,9 @@ export class Screener {
           subIndustry: Utils.toTitleCase(
             screenerItem.subIndustry != null ? String(screenerItem.subIndustry) : null
           ),
-          subIndustryCode:
-            screenerItem.subIndustryCode != null ? String(screenerItem.subIndustryCode) : null,
+          subIndustryCode: screenerItem.subIndustryCode != null
+            ? String(screenerItem.subIndustryCode)
+            : null,
           indexCode: screenerItem.indexCode != null ? String(screenerItem.indexCode) : null,
           marketCapital: screenerItem.marketCapital ?? null,
           totalRevenue: screenerItem.tRevenue ?? null,

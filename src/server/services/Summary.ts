@@ -26,7 +26,7 @@ export class Summary {
     if (summaryItems.length === 0) {
       return
     }
-    await Database.transaction(async tx => {
+    await Database.transaction(async (tx) => {
       for (const summaryItem of summaryItems) {
         const stockCode = summaryItem.StockCode ?? ''
         if (!stockCode) {
