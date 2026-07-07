@@ -4,7 +4,7 @@
 
 Screener saham Indonesia: analisis pakai data, bukan feeling.
 
-[![Deno](https://img.shields.io/badge/deno-2.7.4-000000?logo=deno&logoColor=ffcb00)](https://deno.com) [![price](https://img.shields.io/badge/price-free-22c55e)](https://github.com/NeaByteLab/IDX-UI) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Deno](https://img.shields.io/badge/deno-2.9.0-000000?logo=deno&logoColor=ffcb00)](https://deno.com) [![price](https://img.shields.io/badge/price-free-22c55e)](https://github.com/NeaByteLab/IDX-UI) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 <table align="center">
 <tr>
@@ -32,14 +32,14 @@ Screener saham Indonesia: analisis pakai data, bukan feeling.
 
 ## Fitur Utama
 
-- **Screener** — Filter saham fundamental dan momentum, eksklusi risiko, pagination.
-- **Skor komposit** — Skor gabungan value, quality, momentum; bobot diatur; peringkat sektor.
-- **Ringkasan teknikal di Screener** — RSI dan bid/offer per sektor, chart satu hari.
-- **Kekuatan sektor** — Pie chart kekuatan sektor, periode 26 atau 52 minggu.
-- **Detail saham** — Modal tab fundamental dan teknikal: OHLC, RSI, foreign flow.
-- **Historical bid/offer** — Agregat bid/offer per sektor, rasio dan rata-rata, periode 1W–12M.
-- **Watchlist** — Simpan saham favorit pakai bintang, untuk akses data yang lebih cepat.
-- **API + SQLite** — Backend Deno, data di SQLite, cron tiap jam fetch data IDX.
+- **Screener** - Filter saham fundamental dan momentum, eksklusi risiko, pagination.
+- **Skor komposit** - Skor gabungan value, quality, momentum, bobot diatur, peringkat sektor.
+- **Ringkasan teknikal di Screener** - RSI dan bid/offer per sektor, chart satu hari.
+- **Kekuatan sektor** - Pie chart kekuatan sektor, periode 26 atau 52 minggu.
+- **Detail saham** - Modal tab fundamental dan teknikal: OHLC, RSI, foreign flow.
+- **Historical bid/offer** - Agregat bid/offer per sektor, rasio dan rata-rata, periode 1W–12M.
+- **Watchlist** - Simpan saham favorit pakai bintang, untuk akses data yang lebih cepat.
+- **API + SQLite** - Backend Deno, data di SQLite, cron tiap jam fetch data IDX.
 
 ## Instalasi
 
@@ -72,9 +72,9 @@ deno task db:push
 deno task db:init
 ```
 
-- `db:generate` — buat file migrasi SQL dari schema, saat pertama kali.
-- `db:push` — menerapkan skema ke SQLite (membuat/update tabel).
-- `db:init` — mengisi data awal (snapshot screener, summary).
+- `db:generate` - buat file migrasi SQL dari schema, saat pertama kali.
+- `db:push` - menerapkan skema ke SQLite (membuat/update tabel).
+- `db:init` - mengisi data awal (snapshot screener, summary).
 
 ## Cara Menjalankan
 
@@ -91,14 +91,14 @@ Akses di `http://127.0.0.1:50270` atau `http://localhost:50270` (port sama).
 
 ### Development
 
-**Terminal 1 — API:**
+**Terminal 1 - API:**
 
 ```bash
 deno task api:dev
 # Akses di `http://127.0.0.1:50270` atau `http://localhost:50270`
 ```
 
-**Terminal 2 — UI:**
+**Terminal 2 - UI:**
 
 ```bash
 deno task ui:dev
@@ -107,12 +107,12 @@ deno task ui:dev
 
 ## Dokumentasi
 
-- **[Referensi API](API.md)** — Endpoint, parameter, return, dan contoh `curl` untuk integrasi & testing.
-- **[Contoh Tata Cara Menganalisa](https://x.com/NeaByteLab/status/2032285129696296987)** — Panduan singkat analisa dengan data screener (X / Twitter).
+- **[Referensi API](API.md)** - Endpoint, parameter, return, dan contoh `curl` untuk integrasi & testing.
+- **[Contoh Tata Cara Menganalisa](https://x.com/NeaByteLab/status/2032285129696296987)** - Panduan singkat analisa dengan data screener (X / Twitter).
 
 ## Build & Tes
 
-**Cek** — format, lint, dan typecheck:
+**Cek** - format, lint, dan typecheck:
 
 ```bash
 deno task check
