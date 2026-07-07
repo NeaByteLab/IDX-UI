@@ -29,7 +29,9 @@ const distRoot = `${Deno.cwd()}/dist`
   }
 )
 const router = new Router({
-  routesDir: `${Deno.cwd()}/src/server/routes`
+  routes: {
+    directory: `${Deno.cwd()}/src/server/routes`
+  }
 })
 
 router.static('/assets', {
@@ -39,10 +41,10 @@ router.static('/assets', {
 })
 
 router.catch(async (ctx, error) => {
-  if (error.statusCode !== 404 || ctx.request.method !== 'GET') {
+  if (error.statusCode !== 404 || ctx.get.method() !== 'GET') {
     return null
   }
-  const accept = ctx.request.headers.get('accept') ?? ''
+  const accept = ctx.get.header('accept') ?? ''
   const wantsHtml = accept.includes('text/html') || accept.includes('*/*') || accept === ''
   if (!wantsHtml) {
     return null
@@ -57,6 +59,6 @@ router
     await initDb()
     await runFetchData()
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('[server] Error serving router:', error)
   })
