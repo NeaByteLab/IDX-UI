@@ -99,7 +99,7 @@ GET /api/:code/foreign
   - `start` `<string>`: (Wajib) Tanggal awal (yyyymmdd, 8 digit).
   - `end` `<string>`: (Wajib) Tanggal akhir (yyyymmdd), harus ≥ start.
 - Return: `{ code, start, end, data: Array<{ date, buy, sell, net }>, summary: { totalBuy, totalSell, totalNet, dayCount } }`
-- Deskripsi: Statistik aliran asing (buy, sell, net) per hari dalam rentang tanggal; plus agregat total dan jumlah hari.
+- Deskripsi: Statistik aliran asing (buy, sell, net) per hari dalam rentang tanggal, plus agregat total dan jumlah hari.
 - Error: `400` jika code kosong atau start/end tidak valid.
 
 **Contoh:**
@@ -205,7 +205,7 @@ GET /api/screener/bid-offer
 
 - Parameter query:
   - `date` `<string>`: (Opsional) Tanggal referensi (yyyymmdd). Bawaan: hari terakhir yang ada di summary.
-- Return: `{ date, data: Array<{ sector, bidVolume, offerVolume, count }> }` — agregat volume bid dan offer per sektor untuk satu hari. `data` diurutkan berdasarkan total volume (bid + offer) menurun.
+- Return: `{ date, data: Array<{ sector, bidVolume, offerVolume, count }> }` - agregat volume bid dan offer per sektor untuk satu hari. `data` diurutkan berdasarkan total volume (bid + offer) menurun.
 - Deskripsi: Agregat volume bid dan offer per sektor (universe screener) untuk tanggal tertentu. Berguna untuk chart Bid vs Offer per sektor di Analisa Teknikal.
 
 **Contoh:**
@@ -250,8 +250,8 @@ GET /api/screener/rsi
 - Parameter query:
   - `date` `<string>`: (Opsional) Tanggal referensi (yyyymmdd). Bawaan: hari terakhir yang ada di summary.
   - `period` `<number>`: (Opsional) Periode RSI (1–100). Bawaan: 14.
-- Return: `{ date, period, data: { byCode, bySector } }` — `byCode`: array semua item (per code); `bySector`: key sector → array item.
-- Deskripsi: Satu nilai RSI terakhir per saham (seluruh universe). Tanpa pagination/sort; sort/filter di frontend. `rsi` null jika data close tidak cukup.
+- Return: `{ date, period, data: { byCode, bySector } }` - `byCode`: array semua item (per code), `bySector`: key sector menuju array item.
+- Deskripsi: Satu nilai RSI terakhir per saham (seluruh universe). Tanpa pagination/sort, sort/filter di frontend. `rsi` null jika data close tidak cukup.
 
 **Contoh:**
 
@@ -269,7 +269,7 @@ GET /api/sector/strength
 ```
 
 - Parameter query:
-  - `source` `<string>`: (Opsional) `ohlc` = hitung return dari OHLC summary; kosong = pakai week26PC/week52PC dari screener.
+  - `source` `<string>`: (Opsional) `ohlc` = hitung return dari OHLC summary, kosong = pakai week26PC/week52PC dari screener.
   - `week` `<number>`: (Opsional) Periode minggu: 26 atau 52. Bawaan: 26.
 - Return: `Array<{ sector, avgMomentum, count, rank }>`
 - Deskripsi: Rata-rata momentum per sektor, diurutkan per ranking.
@@ -296,7 +296,7 @@ GET /api/stock/:code/detail
   - `end` `<string>`: (Wajib) Tanggal akhir rentang OHLC (yyyymmdd).
 - Return: Objek detail saham: code, name, sector, industry, fundamental, skor value/quality/momentum/composite, value, volume, ohlc[], flags (hasNotation, hasCorpAction, hasUma).
 - Deskripsi: Detail fundamental, skor komposit, dan deret waktu OHLC untuk satu saham.
-- Error: `400` jika start/end tidak valid; `404` jika saham tidak ditemukan.
+- Error: `400` jika start/end tidak valid, `404` jika saham tidak ditemukan.
 
 **Contoh:**
 
